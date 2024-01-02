@@ -15,10 +15,17 @@ There are two common use cases that this module supports:
 1. Configuring credentials for a set of Terraform Cloud projects, with separate credentials for each project, and allowing credentials to be used by any workspace in the project. [Terraform Cloud project names](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/organize-workspaces-with-projects) can include "letters, numbers, inner spaces, dashes (`-`), and underscores (`_`)." Specify project names with `var.tfc_projects`.
 2. Configuring credentials for a set of Terraform Cloud workspaces, with separate credentials for each workspace, and allowing the credentials to be used by only that specific workspace. [Terraform Cloud workspace names](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/creating) must be unique within the organization (across all projects) and can include "letters, numbers, dashes (`-`), and underscores (`_`)." Specify workspace names with `var.tfc_workspaces`.
 
+To use this module:
+
 - Configure a [backend](https://developer.hashicorp.com/terraform/language/settings/backends/configuration) for Terraform state.
 - Set [Terraform input variables](https://developer.hashicorp.com/terraform/language/values/variables), either with variables set in a remote state workspace, by passing variable values in to the `terraform` CLI command directly with `-var`, or with a `.tfvars` file. Variable definitions files named `terraform.tfvars` or `*.auto.tfvars` will be loaded automatically. If using a variable definitions file with a different name, use `-var-file=filename.tfvars`.
 - Next, declare Terraform configurations using the module.
-- Then, [initialize and apply](https://developer.hashicorp.com/terraform/intro/core-workflow) the Terraform configuration.
+- Then, [initialize and apply](https://developer.hashicorp.com/terraform/intro/core-workflow) the Terraform configurations.
+
+Configurations using this module will provision AWS IAM roles for other Terraform Cloud state workspaces. In order to use the roles to obtain credentials for Terraform runs in other workspaces, each workspace must have the following environment variables as described in the [Terraform Cloud docs](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/dynamic-provider-credentials/aws-configuration):
+
+- `TFC_AWS_PROVIDER_AUTH=true`
+- `TFC_AWS_RUN_ROLE_ARN=<AWS_IAM_ROLE_ARN>`
 
 ## Code quality
 
