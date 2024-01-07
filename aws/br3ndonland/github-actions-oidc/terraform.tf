@@ -2,7 +2,7 @@ terraform {
   cloud {
     organization = "br3ndonland"
     workspaces {
-      name = "github-actions-oidc"
+      name = "github-actions-oidc-br3ndonland"
     }
   }
   required_providers {
