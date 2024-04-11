@@ -53,7 +53,7 @@ variable "repos" {
       br3ndonland = {
         name                   = "br3ndonland"
         visibility             = "public"
-        description            = "GitHub profile repo :muscle: :nerd_face: :coffee:"
+        description            = "GitHub profile repo 💪 🤓 ☕"
         homepage_url           = "https://github.com/br3ndonland"
         topics                 = ["profile-readme"]
         protected_branch_names = ["main"]
@@ -75,7 +75,7 @@ variable "repos" {
       fastenv = {
         name               = "fastenv"
         visibility         = "public"
-        description        = ":gear: Unified environment variable and settings management for FastAPI and beyond :rocket:"
+        description        = "⚙️ Unified environment variable and settings management for FastAPI and beyond 🚀"
         has_discussions    = true
         homepage_url       = "https://fastenv.bws.bio"
         from_repo_template = "br3ndonland/template-python"
@@ -130,7 +130,7 @@ variable "repos" {
       inboard = {
         name               = "inboard"
         visibility         = "public"
-        description        = ":ship: Docker images and utilities to power your Python APIs and help you ship faster. With support for Uvicorn, Gunicorn, Starlette, and FastAPI."
+        description        = "🚢 Docker images and utilities to power your Python APIs and help you ship faster. With support for Uvicorn, Gunicorn, Starlette, and FastAPI."
         has_discussions    = true
         homepage_url       = "https://inboard.bws.bio"
         from_repo_template = "br3ndonland/template-python"
