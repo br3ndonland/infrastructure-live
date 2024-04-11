@@ -192,7 +192,6 @@ variable "repos" {
         required_status_checks = {
           main = [
             { context = "build", integration_id = 15368 },
-            { context = "deploy", integration_id = 15368 },
           ]
         }
       }
