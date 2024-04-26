@@ -162,13 +162,17 @@ variable "repos" {
           develop = [
             { context = "analyze", integration_id = 15368 },
             { context = "CodeQL", integration_id = 0 },
-            { context = "docker (3.12)", integration_id = 15368 },
+            { context = "docker (alpine, 3.12)", integration_id = 15368 },
+            { context = "docker (bookworm, 3.12)", integration_id = 15368 },
+            { context = "docker (slim-bookworm, 3.12)", integration_id = 15368 },
             { context = "python (3.12)", integration_id = 15368 },
             { context = "Vercel", integration_id = 8329 },
           ]
           main = [
             { context = "analyze", integration_id = 15368 },
-            { context = "docker (3.12)", integration_id = 15368 },
+            { context = "docker (alpine, 3.12)", integration_id = 15368 },
+            { context = "docker (bookworm, 3.12)", integration_id = 15368 },
+            { context = "docker (slim-bookworm, 3.12)", integration_id = 15368 },
             { context = "python (3.12)", integration_id = 15368 },
             { context = "Vercel", integration_id = 8329 },
           ]
