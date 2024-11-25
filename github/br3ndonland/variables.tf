@@ -137,6 +137,7 @@ variable "repos" {
         topics = [
           "python",
           "docker",
+          "hatch",
           "poetry",
           "gunicorn",
           "actions",
