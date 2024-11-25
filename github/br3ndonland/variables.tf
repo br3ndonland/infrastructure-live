@@ -50,6 +50,15 @@ variable "repos" {
   })))
   default = {
     br3ndonland = {
+      "br3ndonland.github.io" = {
+        name                   = "br3ndonland.github.io"
+        visibility             = "public"
+        description            = "My personal website, built with Astro 🚀"
+        enable_github_pages    = true
+        homepage_url           = "https://www.bws.bio"
+        protected_branch_names = ["main"]
+        required_signatures    = { main = true }
+      }
       br3ndonland = {
         name                   = "br3ndonland"
         visibility             = "public"
