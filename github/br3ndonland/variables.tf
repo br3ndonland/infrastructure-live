@@ -213,10 +213,10 @@ variable "repos" {
           ]
         }
       }
-      terraform-aws-github-actions-oidc = {
-        name                   = "terraform-aws-github-actions-oidc"
+      tofu-aws-github-actions-oidc = {
+        name                   = "tofu-aws-github-actions-oidc"
         visibility             = "public"
-        description            = "Terraform module for connecting GitHub Actions and AWS with OIDC"
+        description            = "OpenTofu module for connecting GitHub Actions and AWS with OIDC"
         protected_branch_names = ["main"]
         required_signatures    = { main = true }
         required_status_checks = {

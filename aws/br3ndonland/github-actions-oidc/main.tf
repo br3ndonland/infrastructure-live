@@ -9,7 +9,7 @@ locals {
 }
 
 module "github_actions_oidc" {
-  source       = "br3ndonland/github-actions-oidc/aws"
+  source       = "github.com/br3ndonland/tofu-aws-github-actions-oidc"
   github_repos = var.github_repos_with_oidc
 }
 
