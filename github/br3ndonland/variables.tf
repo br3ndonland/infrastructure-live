@@ -81,6 +81,15 @@ variable "repos" {
           ]
         }
       }
+      dovi_tool = {
+        name                   = "dovi_tool"
+        visibility             = "public"
+        description            = "Container image that can be used to run dovi_tool"
+        has_discussions        = true
+        topics                 = ["dolby-vision", "dovi"]
+        protected_branch_names = ["main"]
+        required_signatures    = { main = true }
+      }
       fastenv = {
         name               = "fastenv"
         visibility         = "public"
