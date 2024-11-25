@@ -1,3 +1,19 @@
+variable "op_service_account_token" {
+  description = "1Password Service Account token"
+  type        = string
+  default     = null
+}
+
+variable "op_vault" {
+  description = "1Password vault UUID or name"
+  type        = string
+}
+
+variable "op_vault_item_github_token" {
+  description = "1Password item containing GitHub Personal Access Token (PAT) for org admin"
+  type        = string
+}
+
 variable "owner" {
   description = "GitHub owner (user or organization) for the workspace"
   type        = string
@@ -7,6 +23,7 @@ variable "token" {
   description = "GitHub Personal Access Token (PAT) for org admin"
   sensitive   = true
   type        = string
+  default     = null
 }
 
 variable "organization_settings" {

@@ -4,6 +4,28 @@
 
 This is an example of how to manage GitHub organizations with the [GitHub Terraform provider](https://registry.terraform.io/providers/integrations/github/latest).
 
+The GitHub provider requires credentials, such as a [Personal Access Token](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens) ("PAT"). The PAT for provider authentication has been stored in 1Password and can be retrieved using a [1Password Service Account](https://developer.1password.com/docs/service-accounts/get-started).
+
+The 1Password Service Account was created with the 1Password CLI:
+
+```sh
+op service-account create github --vault VAULT_UUID:read_items
+```
+
+The GitHub PAT and the Service Account token were then saved as 1Password items.
+
+The [1Password Terraform/OpenTofu provider](https://developer.1password.com/docs/terraform/) can then use the Service Account token to authenticate.
+
+For local development, use the [1Password CLI](https://developer.1password.com/docs/cli/secret-references#with-op-read) to retrieve the Service Account token.
+
+```sh
+export OP_SERVICE_ACCOUNT_TOKEN=$(op read "op://vault-name/item-name/password")
+```
+
+For CI/CD with GitHub Actions, store the Service Account token in [GitHub Secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions) and use it with [1Password/load-secrets-action](https://github.com/1Password/load-secrets-action).
+
+The 1Password provider will then use the `onepassword_item` data source to read the GitHub PAT.
+
 ## Organizations
 
 The GitHub Terraform provider can manage [GitHub organization settings](https://docs.github.com/en/organizations/collaborating-with-groups-in-organizations/accessing-your-organizations-settings) with the [`github_organization_settings` resource](https://registry.terraform.io/providers/integrations/github/latest/docs/resources/organization_settings).
