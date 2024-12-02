@@ -17,11 +17,11 @@ data "aws_iam_policy_document" "s3_bucket_for_oidc" {
   for_each = local.github_repos
   statement {
     actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${each.value.repo}"]
+    resources = ["arn:aws:s3:::${each.key}", "arn:aws:s3:::${each.value.repo}"]
   }
   statement {
     actions   = ["s3:DeleteObject", "s3:GetObject", "s3:PutObject"]
-    resources = ["arn:aws:s3:::${each.value.repo}/*"]
+    resources = ["arn:aws:s3:::${each.key}/*", "arn:aws:s3:::${each.value.repo}/*"]
   }
 }
 
