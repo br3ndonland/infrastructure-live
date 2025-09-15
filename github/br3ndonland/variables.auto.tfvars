@@ -64,25 +64,12 @@ repos = {
         "fastapi",
         "anyio",
       ]
-      default_branch_name = "develop"
-      protected_branch_names = [
-        "develop",
-        "main",
-      ]
-      required_signatures = {
-        develop = true
-        main    = true
-      }
+      protected_branch_names = ["main"]
+      required_signatures    = { main = true }
       required_status_checks = {
         main = [
           { context = "analyze", integration_id = 15368 },
           { context = "ci (3.12)", integration_id = 15368 },
-          { context = "Vercel", integration_id = 8329 },
-        ]
-        develop = [
-          { context = "analyze", integration_id = 15368 },
-          { context = "ci (3.12)", integration_id = 15368 },
-          { context = "CodeQL", integration_id = 0 },
           { context = "Vercel", integration_id = 8329 },
         ]
       }
