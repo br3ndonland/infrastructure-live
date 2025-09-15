@@ -162,7 +162,7 @@ repos = {
       has_discussions        = true
       is_repo_template       = true
       protected_branch_names = ["main"]
-      required_signatures    = { develop = true, main = true }
+      required_signatures    = { main = true }
       required_status_checks = {
         main = [
           { context = "ci (3.12)", integration_id = 15368 }
