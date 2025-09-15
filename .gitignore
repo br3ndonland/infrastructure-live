@@ -1,3 +1,54 @@
+## macOS
+##
+## https://github.com/github/gitignore/blob/main/Global/macOS.gitignore
+
+# General
+.DS_Store
+__MACOSX/
+.AppleDouble
+.LSOverride
+Icon[
+]
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+## mise
+##
+## https://github.com/github/gitignore/blob/main/Global/mise.gitignore
+
+# https://mise.jdx.dev/configuration.html
+# https://mise.jdx.dev/configuration/environments.html
+.mise.*.local.toml
+.mise.local.toml
+mise.*.local.toml
+mise.local.toml
+.mise/*.local.toml
+mise/*.local.toml
+
+# https://mise.jdx.dev/configuration.html#tool-versions
+#.tool-versions
+
+## OpenTofu
+##
+## https://github.com/github/gitignore/blob/main/community/OpenTofu.gitignore
+
 # Local .terraform directories
 **/.terraform/*
 
@@ -10,8 +61,8 @@ crash.log
 crash.*.log
 
 # Exclude all .tfvars files, which are likely to contain sensitive data, such as
-# password, private keys, and other secrets. These should not be part of version 
-# control as they are data points which are potentially sensitive and subject 
+# password, private keys, and other secrets. These should not be part of version
+# control as they are data points which are potentially sensitive and subject
 # to change depending on the environment.
 *.tfvars
 *.tfvars.json
@@ -19,16 +70,73 @@ crash.*.log
 # Ignore override files as they are usually used to override resources locally and so
 # are not checked in
 override.tf
+override.tofu
 override.tf.json
+override.tofu.json
 *_override.tf
+*_override.tofu
 *_override.tf.json
+*_override.tofu.json
+
+# Ignore transient lock info files created by tofu apply
+.terraform.tfstate.lock.info
 
 # Include override files you do wish to add to version control using negated pattern
 # !example_override.tf
+# !example_override.tofu
 
-# Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
+# Include tfplan files to ignore the plan output of command: tofu plan -out=tfplan
 # example: *tfplan*
 
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+## VSCode
+##
+## https://github.com/github/gitignore/blob/main/Global/VisualStudioCode.gitignore
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!*.code-workspace
+
+# Built Visual Studio Code Extensions
+*.vsix
+
+## Windows
+##
+## https://github.com/github/gitignore/blob/main/Global/Windows.gitignore
+
+# Windows thumbnail cache files
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+
+# Dump file
+*.stackdump
+
+# Folder config file
+[Dd]esktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+## Misc
+##
+##
+[Tt][Oo][Dd][Oo]*
