@@ -97,6 +97,10 @@ resource "github_repository" "repo" {
     content {
       build_type = "workflow"
       cname      = each.value.github_pages_cname
+      source {
+        branch = each.value.default_branch_name
+        path   = each.value.github_pages_path
+      }
     }
   }
   dynamic "template" {

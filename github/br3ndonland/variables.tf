@@ -51,6 +51,7 @@ variable "repos" {
     allow_squash_merge              = optional(bool, true)
     enable_github_pages             = optional(bool, false)
     github_pages_cname              = optional(string)
+    github_pages_path               = optional(string, "/")
     has_discussions                 = optional(bool, false)
     has_issues                      = optional(bool, false)
     has_vulnerability_alerts        = optional(bool)

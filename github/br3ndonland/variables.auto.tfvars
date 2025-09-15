@@ -139,6 +139,7 @@ repos = {
       visibility          = "public"
       description         = "A quick reference guide and sample code for statistical programming in R"
       enable_github_pages = true
+      github_pages_path   = "/docs"
       homepage_url        = "https://br3ndonland.github.io/R-guide"
       topics = [
         "r",
