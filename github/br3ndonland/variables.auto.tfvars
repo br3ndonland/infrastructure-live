@@ -1,7 +1,6 @@
 repos = {
   br3ndonland = {
     "br3ndonland.github.io" = {
-      name                   = "br3ndonland.github.io"
       visibility             = "public"
       description            = "My personal website, built with Astro 🚀"
       enable_github_pages    = true
@@ -10,7 +9,6 @@ repos = {
       required_signatures    = { main = true }
     }
     br3ndonland = {
-      name                   = "br3ndonland"
       visibility             = "public"
       description            = "GitHub profile repo 💪 🤓 ☕"
       homepage_url           = "https://github.com/br3ndonland"
@@ -19,7 +17,6 @@ repos = {
       required_signatures    = { main = true }
     }
     dotfiles = {
-      name                   = "dotfiles"
       visibility             = "public"
       description            = "Computer setup and settings. Apple Silicon ready."
       protected_branch_names = ["main"]
@@ -32,7 +29,6 @@ repos = {
       }
     }
     dovi_tool = {
-      name                   = "dovi_tool"
       visibility             = "public"
       description            = "Container image that can be used to run dovi_tool"
       has_discussions        = true
@@ -41,7 +37,6 @@ repos = {
       required_signatures    = { main = true }
     }
     fastenv = {
-      name               = "fastenv"
       visibility         = "public"
       description        = "⚙️ Unified environment variable and settings management for FastAPI and beyond 🚀"
       has_discussions    = true
@@ -75,7 +70,6 @@ repos = {
       }
     }
     golearn = {
-      name                   = "golearn"
       visibility             = "public"
       description            = "Resources from learning Go"
       topics                 = ["go", "golang", "course", "tutorial", "testing"]
@@ -83,7 +77,6 @@ repos = {
       required_signatures    = { main = true }
     }
     inboard = {
-      name               = "inboard"
       visibility         = "public"
       description        = "🚢 Docker images and utilities to power your Python APIs and help you ship faster. With support for Uvicorn, Gunicorn, Starlette, and FastAPI."
       has_discussions    = true
@@ -134,8 +127,7 @@ repos = {
         ]
       }
     }
-    r-guide = {
-      name                = "R-guide"
+    R-guide = {
       visibility          = "public"
       description         = "A quick reference guide and sample code for statistical programming in R"
       enable_github_pages = true
@@ -157,7 +149,6 @@ repos = {
       }
     }
     template-python = {
-      name                   = "template-python"
       visibility             = "public"
       description            = "Template repository for Python projects"
       has_discussions        = true
@@ -171,7 +162,6 @@ repos = {
       }
     }
     tofu-aws-github-actions-oidc = {
-      name                   = "tofu-aws-github-actions-oidc"
       visibility             = "public"
       description            = "OpenTofu module for connecting GitHub Actions and AWS with OIDC"
       protected_branch_names = ["main"]
@@ -183,7 +173,6 @@ repos = {
       }
     }
     terraform-examples = {
-      name                   = "terraform-examples"
       visibility             = "public"
       description            = "Example Terraform configurations"
       protected_branch_names = ["main"]

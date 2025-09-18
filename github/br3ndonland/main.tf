@@ -9,17 +9,16 @@ locals {
     key => value if key == var.owner
   }
   repo_branch_names = {
-    for key, value in lookup(var.repos, var.owner, {}) :
-    key => toset([for branch_name in value.protected_branch_names : branch_name])
-    if value.protected_branch_names != null
+    for repo_name, repo_configuration in lookup(var.repos, var.owner, {}) :
+    repo_name => toset([for branch_name in repo_configuration.protected_branch_names : branch_name])
+    if repo_configuration.protected_branch_names != null
   }
   repo_branch_configurations = merge([
-    for key, branch_names in local.repo_branch_names : {
-      for branch_name in branch_names : "${key}-${replace(branch_name, "/[\\*\\s].*/", "")}" => {
-        branch         = branch_name
-        source_branch  = strcontains(branch_name, " from ") ? split(" from ", branch_name)[1] : "main"
-        repository     = var.repos[var.owner][key].name
-        repository_key = key
+    for repo_name, branch_names in local.repo_branch_names : {
+      for branch_name in branch_names : "${repo_name}-${replace(branch_name, "/[\\*\\s].*/", "")}" => {
+        repository    = repo_name
+        branch        = branch_name
+        source_branch = strcontains(branch_name, " from ") ? split(" from ", branch_name)[1] : "main"
       }
     }
   ]...)
@@ -53,7 +52,7 @@ resource "github_organization_settings" "org" {
 
 resource "github_repository" "repo" {
   for_each                    = lookup(var.repos, var.owner, {})
-  name                        = each.value.name
+  name                        = each.key
   description                 = each.value.description
   homepage_url                = each.value.homepage_url
   topics                      = each.value.topics
@@ -119,16 +118,16 @@ resource "github_branch" "branch" {
     for key, value in local.repo_branch_configurations :
     key => value if value.branch != "main"
   }
+  repository    = each.value.repository
   branch        = each.value.branch
   source_branch = each.value.source_branch
-  repository    = each.value.repository
 }
 
 resource "github_branch_default" "default" {
   depends_on = [github_repository.repo, github_branch.branch]
-  for_each   = lookup(var.repos, var.owner, {})
-  repository = each.value.name
-  branch     = each.value.default_branch_name
+  for_each   = github_repository.repo
+  repository = each.key
+  branch     = var.repos[var.owner][each.key].default_branch_name
 }
 
 resource "github_repository_ruleset" "branch_create" {

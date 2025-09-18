@@ -39,7 +39,6 @@ variable "organization_settings" {
 variable "repos" {
   description = "Map of configuration attributes for each github_repository resource"
   type = map(map(object({
-    name                            = string
     visibility                      = string
     description                     = optional(string)
     gitignore_template              = optional(string)
