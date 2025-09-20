@@ -27,7 +27,7 @@ variable "token" {
 }
 
 variable "organization_settings" {
-  description = "GitHub organization settings"
+  description = "GitHub organization settings. Each key should be the name of a GitHub organization."
   type = map(object({
     advanced_security             = optional(bool, false)
     billing_email                 = string
@@ -37,7 +37,20 @@ variable "organization_settings" {
 }
 
 variable "repos" {
-  description = "Map of configuration attributes for each github_repository resource"
+  description = <<-DESCRIPTION
+    Map of configuration attributes for each `github_repository` resource.
+
+    Each top-level map key should be the name of a GitHub user or organization.
+    Within each user or org map, each key should be the name of a repo.
+
+    Values for each repo should correspond to the given object type attributes.
+
+    - For `required_deployments`, each map key should be the name of a ruleset ("branches" or "tags").
+      Within each of those maps, each list item should be the name of a deployment environment.
+    - For `required_status_checks`, each map key should be the name of a ruleset ("branches" or "tags").
+      Within each of those maps, each key should be the name of a check and each value should be an integration ID.
+      Use `15368` as the integration ID for GitHub Actions, or `0` to allow any integration ID.
+  DESCRIPTION
   type = map(map(object({
     # general settings
     visibility               = string
@@ -74,7 +87,14 @@ variable "repos" {
 }
 
 variable "outside_collaborators" {
-  description = "GitHub organization outside collaborators"
+  description = <<-DESCRIPTION
+    GitHub organization outside collaborators.
+
+    Each top-level map key should be the name of a GitHub user or organization.
+    Within each user or org map, each key should be a combination of collaborator name and repo name.
+
+    Values for each repo should correspond to the given object type attributes.
+  DESCRIPTION
   type = map(map(object({
     permission = optional(string, "push")
     repository = string
