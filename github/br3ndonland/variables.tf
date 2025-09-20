@@ -39,23 +39,32 @@ variable "organization_settings" {
 variable "repos" {
   description = "Map of configuration attributes for each github_repository resource"
   type = map(map(object({
-    visibility                      = string
-    description                     = optional(string)
-    gitignore_template              = optional(string)
-    is_repo_template                = optional(bool, false)
-    from_repo_template              = optional(string)
-    topics                          = optional(list(string))
-    allow_merge_commit              = optional(bool, false)
-    allow_rebase_merge              = optional(bool, false)
-    allow_squash_merge              = optional(bool, true)
-    enable_github_pages             = optional(bool, false)
-    github_pages_cname              = optional(string)
-    github_pages_path               = optional(string, "/")
-    has_discussions                 = optional(bool, false)
-    has_issues                      = optional(bool, false)
-    has_vulnerability_alerts        = optional(bool)
-    homepage_url                    = optional(string)
-    default_branch_name             = optional(string, "main")
+    # general settings
+    visibility               = string
+    description              = optional(string)
+    homepage_url             = optional(string)
+    topics                   = optional(list(string))
+    from_repo_template       = optional(string)
+    gitignore_template       = optional(string)
+    has_discussions          = optional(bool, false)
+    has_issues               = optional(bool, false)
+    has_vulnerability_alerts = optional(bool)
+    is_repo_template         = optional(bool, false)
+
+    # default branch
+    default_branch_name = optional(string, "main")
+
+    # pull requests
+    allow_merge_commit = optional(bool, false)
+    allow_rebase_merge = optional(bool, false)
+    allow_squash_merge = optional(bool, true)
+
+    # pages
+    enable_github_pages = optional(bool, false)
+    github_pages_cname  = optional(string)
+    github_pages_path   = optional(string, "/")
+
+    # rules
     protected_branch_names          = optional(list(string))
     required_approving_review_count = optional(number, 1)
     required_deployments            = optional(map(list(string)))
