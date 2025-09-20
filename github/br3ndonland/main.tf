@@ -130,54 +130,25 @@ resource "github_branch_default" "default" {
   branch     = var.repos[var.owner][each.key].default_branch_name
 }
 
-resource "github_repository_ruleset" "branch_create" {
-  depends_on  = [github_repository.repo, github_branch.branch]
-  for_each    = local.repo_branch_configurations
+resource "github_repository_ruleset" "branches" {
+  for_each    = github_repository.repo
   enforcement = "active"
-  name        = "branch-create-${each.value.branch}"
-  repository  = each.value.repository
+  name        = "branches"
+  repository  = each.key
   target      = "branch"
+
   bypass_actors {
     actor_id    = 5 # repository admin
     actor_type  = "RepositoryRole"
     bypass_mode = "always"
   }
+
   bypass_actors {
     actor_id    = 2 # repository maintainer
     actor_type  = "RepositoryRole"
     bypass_mode = "always"
   }
-  dynamic "bypass_actors" {
-    for_each = local.organization_settings
-    content {
-      actor_id    = 1
-      actor_type  = "OrganizationAdmin"
-      bypass_mode = "always"
-    }
-  }
-  conditions {
-    ref_name {
-      exclude = []
-      include = ["refs/heads/${each.value.branch}"]
-    }
-  }
-  rules {
-    creation = true
-  }
-}
 
-resource "github_repository_ruleset" "branch_delete" {
-  depends_on  = [github_repository.repo, github_branch.branch]
-  for_each    = local.repo_branch_configurations
-  enforcement = "active"
-  name        = "branch-delete-${each.value.branch}"
-  repository  = each.value.repository
-  target      = "branch"
-  bypass_actors {
-    actor_id    = 5 # repository admin
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
   dynamic "bypass_actors" {
     for_each = local.organization_settings
     content {
@@ -186,145 +157,81 @@ resource "github_repository_ruleset" "branch_delete" {
       bypass_mode = "always"
     }
   }
-  conditions {
-    ref_name {
-      exclude = []
-      include = ["refs/heads/${each.value.branch}"]
-    }
-  }
-  rules {
-    deletion = true
-  }
-}
 
-resource "github_repository_ruleset" "branch_update" {
-  depends_on  = [github_repository.repo, github_branch.branch]
-  for_each    = local.repo_branch_configurations
-  enforcement = "active"
-  name        = "branch-update-${each.value.branch}"
-  repository  = each.value.repository
-  target      = "branch"
-  bypass_actors {
-    actor_id    = 5 # repository admin
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
-  bypass_actors {
-    actor_id    = 2 # repository maintainer
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
-  dynamic "bypass_actors" {
-    for_each = local.organization_settings
-    content {
-      actor_id    = 1
-      actor_type  = "OrganizationAdmin"
-      bypass_mode = "always"
-    }
-  }
   conditions {
     ref_name {
       exclude = []
-      include = ["refs/heads/${each.value.branch}"]
+      include = concat(
+        ["~DEFAULT_BRANCH"],
+        [
+          for branch_name in local.repo_branch_names[each.key] :
+          "refs/heads/${branch_name}" if branch_name != github_branch_default.default[each.key].branch
+        ],
+      )
     }
   }
+
   rules {
+    creation                = true
+    deletion                = true
     non_fast_forward        = true
     required_linear_history = true
-    required_signatures = (
-      var.repos[var.owner][each.value.repository_key].required_signatures != null
-      ? var.repos[var.owner][each.value.repository_key].required_signatures[each.value.branch]
-      : false
-    )
-    update = true
+    required_signatures     = var.repos[var.owner][each.key].required_signatures["branches"]
+
     pull_request {
-      required_approving_review_count = (
-        var.repos[var.owner][each.value.repository_key].required_approving_review_count != null
-        ? var.repos[var.owner][each.value.repository_key].required_approving_review_count[each.value.branch]
-        : 1
-      )
-      require_code_owner_review  = true
-      require_last_push_approval = true
+      dismiss_stale_reviews_on_push   = false
+      require_code_owner_review       = true
+      require_last_push_approval      = true
+      required_approving_review_count = var.repos[var.owner][each.key].required_approving_review_count
     }
+
     dynamic "required_deployments" {
-      for_each = {
-        for key, value in var.repos[var.owner] :
-        key => toset(lookup(value.required_deployments, each.value.branch, []))
-        if value.name == each.value.repository
-        && value.required_deployments != null
-      }
+      for_each = (
+        var.repos[var.owner][each.key].required_deployments != null
+        ? toset(var.repos[var.owner][each.key].required_deployments["branches"])
+        : []
+      )
       content {
         required_deployment_environments = required_deployments.value
       }
     }
+
     dynamic "required_status_checks" {
-      for_each = {
-        for key, value in var.repos[var.owner] :
-        key => toset(lookup(value.required_status_checks, each.value.branch, []))
-        if value.name == each.value.repository
-        && value.required_status_checks != null
-      }
+      for_each = var.repos[var.owner][each.key].required_status_checks != null ? [""] : []
       content {
         dynamic "required_check" {
-          for_each = required_status_checks.value
+          for_each = var.repos[var.owner][each.key].required_status_checks["branches"]
           content {
-            context        = required_check.value.context
-            integration_id = required_check.value.integration_id
+            context        = required_check.key
+            integration_id = required_check.value
           }
         }
+        do_not_enforce_on_create             = true
         strict_required_status_checks_policy = true
       }
     }
   }
 }
 
-resource "github_repository_ruleset" "tag_create" {
+resource "github_repository_ruleset" "tags" {
   for_each    = github_repository.repo
   enforcement = "active"
-  name        = "tag create"
-  repository  = each.value.name
+  name        = "tags"
+  repository  = each.key
   target      = "tag"
+
   bypass_actors {
     actor_id    = 5 # repository admin
     actor_type  = "RepositoryRole"
     bypass_mode = "always"
   }
+
   bypass_actors {
     actor_id    = 2 # repository maintainer
     actor_type  = "RepositoryRole"
     bypass_mode = "always"
   }
-  dynamic "bypass_actors" {
-    for_each = local.organization_settings
-    content {
-      actor_id    = 1
-      actor_type  = "OrganizationAdmin"
-      bypass_mode = "always"
-    }
-  }
-  conditions {
-    ref_name {
-      exclude = []
-      include = ["~ALL"]
-    }
-  }
-  rules {
-    creation            = true
-    required_signatures = true
-  }
-}
 
-resource "github_repository_ruleset" "tag_delete" {
-  for_each    = github_repository.repo
-  enforcement = "active"
-  name        = "tag delete"
-  repository  = each.value.name
-  target      = "tag"
-  bypass_actors {
-    actor_id    = 5 # repository admin
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
   dynamic "bypass_actors" {
     for_each = local.organization_settings
     content {
@@ -333,15 +240,45 @@ resource "github_repository_ruleset" "tag_delete" {
       bypass_mode = "always"
     }
   }
+
   conditions {
     ref_name {
       exclude = []
       include = ["~ALL"]
     }
   }
+
   rules {
-    deletion = true
-    update   = true
+    creation         = true
+    deletion         = true
+    non_fast_forward = true
+    update           = true
+
+    required_signatures = var.repos[var.owner][each.key].required_signatures["tags"]
+
+    dynamic "required_deployments" {
+      for_each = (
+        var.repos[var.owner][each.key].required_deployments != null
+        ? toset(var.repos[var.owner][each.key].required_deployments["tags"])
+        : []
+      )
+      content {
+        required_deployment_environments = required_deployments.value
+      }
+    }
+
+    dynamic "required_status_checks" {
+      for_each = var.repos[var.owner][each.key].required_status_checks != null ? [""] : []
+      content {
+        dynamic "required_check" {
+          for_each = var.repos[var.owner][each.key].required_status_checks["tags"]
+          content {
+            context        = required_check.key
+            integration_id = required_check.value
+          }
+        }
+      }
+    }
   }
 }
 

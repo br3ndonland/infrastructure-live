@@ -1,19 +1,38 @@
-import {
-  to = github_repository.repo["br3ndonland.github.io"]
-  id = "br3ndonland.github.io"
+locals {
+  github_repository_ruleset_ids = {
+    "br3ndonland.github.io" = {
+      branches = 7936171
+      tags     = 7936176
+    }
+    fastenv = {
+      branches = 7935896
+      tags     = 7935905
+    }
+    inboard = {
+      branches = 7935911
+      tags     = 7935929
+    }
+    template-python = {
+      branches = 7951421
+      tags     = 7951424
+    }
+  }
 }
 
 import {
-  to = github_branch_default.default["br3ndonland.github.io"]
-  id = "br3ndonland.github.io"
+  for_each = {
+    for key, value in var.repos[var.owner] :
+    key => value if contains(keys(local.github_repository_ruleset_ids), key)
+  }
+  id = "${each.key}:${local.github_repository_ruleset_ids[each.key]["branches"]}"
+  to = github_repository_ruleset.branches[each.key]
 }
 
 import {
-  to = github_repository.repo["dovi_tool"]
-  id = "dovi_tool"
-}
-
-import {
-  to = github_branch_default.default["dovi_tool"]
-  id = "dovi_tool"
+  for_each = {
+    for key, value in var.repos[var.owner] :
+    key => value if contains(keys(local.github_repository_ruleset_ids), key)
+  }
+  id = "${each.key}:${local.github_repository_ruleset_ids[each.key]["tags"]}"
+  to = github_repository_ruleset.tags[each.key]
 }

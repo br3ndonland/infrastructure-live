@@ -6,7 +6,21 @@ repos = {
       enable_github_pages    = true
       homepage_url           = "https://www.bws.bio"
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
+      required_status_checks = {
+        branches = {
+          "Build"  = 15368
+          "Vercel" = 8329
+        }
+        tags = {
+          "Build"                  = 15368
+          "Deploy to GitHub Pages" = 15368
+          "Vercel"                 = 8329
+        }
+      }
     }
     br3ndonland = {
       visibility             = "public"
@@ -14,18 +28,29 @@ repos = {
       homepage_url           = "https://github.com/br3ndonland"
       topics                 = ["profile-readme"]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
     }
     dotfiles = {
       visibility             = "public"
       description            = "Computer setup and settings. Apple Silicon ready."
+      topics                 = ["apple-silicon", "dotfiles", "homebrew", "m1", "macos", "strap"]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "check (macos-latest)", integration_id = 15368 },
-          { context = "check (ubuntu-latest)", integration_id = 15368 },
-        ]
+        branches = {
+          "check (macos-14)"      = 15368
+          "check (ubuntu-latest)" = 15368
+        }
+        tags = {
+          "check (macos-14)"      = 15368
+          "check (ubuntu-latest)" = 15368
+        }
       }
     }
     dovi_tool = {
@@ -34,7 +59,10 @@ repos = {
       has_discussions        = true
       topics                 = ["dolby-vision", "dovi"]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
     }
     fastenv = {
       visibility         = "public"
@@ -60,13 +88,19 @@ repos = {
         "anyio",
       ]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "analyze", integration_id = 15368 },
-          { context = "ci (3.12)", integration_id = 15368 },
-          { context = "Vercel", integration_id = 8329 },
-        ]
+        branches = {
+          "ci (3.12)" = 15368
+          "Vercel"    = 8329
+        }
+        tags = {
+          "ci (3.12)" = 15368
+          "Vercel"    = 8329
+        }
       }
     }
     golearn = {
@@ -74,7 +108,10 @@ repos = {
       description            = "Resources from learning Go"
       topics                 = ["go", "golang", "course", "tutorial", "testing"]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
     }
     inboard = {
       visibility         = "public"
@@ -98,54 +135,48 @@ repos = {
         "github-container-registry",
         "ghcr",
       ]
-      default_branch_name = "develop"
-      protected_branch_names = [
-        "develop",
-        "main",
-      ]
+      default_branch_name    = "develop"
+      protected_branch_names = ["develop", "main"]
       required_signatures = {
-        develop = true
-        main    = true
+        branches = true
+        tags     = true
       }
       required_status_checks = {
-        develop = [
-          { context = "analyze", integration_id = 15368 },
-          { context = "CodeQL", integration_id = 0 },
-          { context = "docker (alpine, 3.12)", integration_id = 15368 },
-          { context = "docker (bookworm, 3.12)", integration_id = 15368 },
-          { context = "docker (slim-bookworm, 3.12)", integration_id = 15368 },
-          { context = "python (3.12)", integration_id = 15368 },
-          { context = "Vercel", integration_id = 8329 },
-        ]
-        main = [
-          { context = "analyze", integration_id = 15368 },
-          { context = "docker (alpine, 3.12)", integration_id = 15368 },
-          { context = "docker (bookworm, 3.12)", integration_id = 15368 },
-          { context = "docker (slim-bookworm, 3.12)", integration_id = 15368 },
-          { context = "python (3.12)", integration_id = 15368 },
-          { context = "Vercel", integration_id = 8329 },
-        ]
+        branches = {
+          "docker (alpine, 3.12)"        = 15368
+          "docker (bookworm, 3.12)"      = 15368
+          "docker (slim-bookworm, 3.12)" = 15368
+          "python (3.12)"                = 15368
+          "Vercel"                       = 8329
+        }
+        tags = {
+          "docker (alpine, 3.12)"        = 15368
+          "docker (bookworm, 3.12)"      = 15368
+          "docker (slim-bookworm, 3.12)" = 15368
+          "python (3.12)"                = 15368
+          "Vercel"                       = 8329
+        }
       }
     }
     R-guide = {
-      visibility          = "public"
-      description         = "A quick reference guide and sample code for statistical programming in R"
-      enable_github_pages = true
-      github_pages_path   = "/docs"
-      homepage_url        = "https://br3ndonland.github.io/R-guide"
-      topics = [
-        "r",
-        "rmarkdown",
-        "rstudio",
-        "science",
-        "statistics",
-      ]
+      visibility             = "public"
+      description            = "A quick reference guide and sample code for statistical programming in R"
+      enable_github_pages    = true
+      github_pages_path      = "/docs"
+      homepage_url           = "https://br3ndonland.github.io/R-guide"
+      topics                 = ["r", "rmarkdown", "rstudio", "science", "statistics"]
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "build", integration_id = 15368 },
-        ]
+        branches = {
+          build = 15368
+        }
+        tags = {
+          build = 15368
+        }
       }
     }
     template-python = {
@@ -154,35 +185,52 @@ repos = {
       has_discussions        = true
       is_repo_template       = true
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "ci (3.12)", integration_id = 15368 }
-        ]
+        branches = {
+          "ci (3.13)" = 15368
+        }
+        tags = {
+          "ci (3.13)" = 15368
+        }
       }
     }
     tofu-aws-github-actions-oidc = {
       visibility             = "public"
       description            = "OpenTofu module for connecting GitHub Actions and AWS with OIDC"
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "check", integration_id = 15368 }
-        ]
+        branches = {
+          check = 15368
+        }
+        tags = {
+          check = 15368
+        }
       }
     }
     terraform-examples = {
       visibility             = "public"
       description            = "Example Terraform configurations"
       protected_branch_names = ["main"]
-      required_signatures    = { main = true }
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
       required_status_checks = {
-        main = [
-          { context = "check", integration_id = 15368 }
-        ]
+        branches = {
+          check = 15368
+        }
+        tags = {
+          check = 15368
+        }
       }
     }
   }
 }
-

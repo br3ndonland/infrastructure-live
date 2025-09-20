@@ -57,13 +57,10 @@ variable "repos" {
     homepage_url                    = optional(string)
     default_branch_name             = optional(string, "main")
     protected_branch_names          = optional(list(string))
-    required_approving_review_count = optional(map(number))
+    required_approving_review_count = optional(number, 1)
     required_deployments            = optional(map(list(string)))
     required_signatures             = optional(map(bool))
-    required_status_checks = optional(map(list(object({
-      context        = string
-      integration_id = optional(number, 0)
-    }))))
+    required_status_checks          = optional(map(map(number)))
   })))
 }
 
