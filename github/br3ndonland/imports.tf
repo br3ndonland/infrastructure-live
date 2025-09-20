@@ -4,6 +4,10 @@ locals {
       branches = 7936171
       tags     = 7936176
     }
+    crp = {
+      branches = 7935659
+      tags     = 7935662
+    }
     fastenv = {
       branches = 7935896
       tags     = 7935905
@@ -35,4 +39,14 @@ import {
   }
   id = "${each.key}:${local.github_repository_ruleset_ids[each.key]["tags"]}"
   to = github_repository_ruleset.tags[each.key]
+}
+
+import {
+  id = "crp"
+  to = github_repository.repo["crp"]
+}
+
+import {
+  id = "crp"
+  to = github_branch_default.default["crp"]
 }

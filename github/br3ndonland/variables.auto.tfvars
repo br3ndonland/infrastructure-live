@@ -35,6 +35,37 @@ repos = {
         tags     = true
       }
     }
+    crp = {
+      visibility   = "public"
+      description  = "Tools for cropping images."
+      homepage_url = "https://crp.bws.bio"
+      topics = [
+        "crop-image",
+        "crop",
+        "cropping",
+        "image-manipulation",
+        "image-processing",
+        "tmdb",
+      ]
+      from_repo_template     = "br3ndonland/template-python"
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
+      required_status_checks = {
+        branches = {
+          "ci (3.12)" = 15368
+          "ci (3.13)" = 15368
+          "Vercel"    = 8329
+        }
+        tags = {
+          "ci (3.12)" = 15368
+          "ci (3.13)" = 15368
+          "Vercel"    = 8329
+        }
+      }
+    }
     dotfiles = {
       visibility             = "public"
       description            = "Computer setup and settings. Apple Silicon ready."
