@@ -16,88 +16,99 @@ module "github_actions_oidc" {
 data "aws_iam_policy_document" "github_actions_oidc_provisioning" {
   statement {
     actions = [
-      "iam:AddClientIDToOpenIDConnectProvider",
-      "iam:CreateOpenIDConnectProvider",
-      "iam:TagOpenIDConnectProvider",
-      "iam:UpdateOpenIDConnectProviderThumbprint",
-    ]
-    resources = ["arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"]
-    sid       = "IAMOIDCProviderProvisioningActions"
-  }
-  statement {
-    actions = [
-      "iam:GetOpenIDConnectProvider",
       "iam:ListOpenIDConnectProviders",
       "iam:ListOpenIDConnectProviderTags",
     ]
+    resources = ["*"]
+    sid       = "IAMOIDCProviderListActions"
+  }
+  statement {
+    actions   = ["iam:GetOpenIDConnectProvider"]
     resources = ["*"]
     sid       = "IAMOIDCProviderReadActions"
   }
   statement {
     actions = [
-      "iam:DeleteOpenIDConnectProvider",
-      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:TagOpenIDConnectProvider",
       "iam:UntagOpenIDConnectProvider",
     ]
     resources = ["arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"]
-    sid       = "IAMOIDCProviderCleanupActions"
+    sid       = "IAMOIDCProviderTaggingActions"
   }
   statement {
     actions = [
-      "iam:CreatePolicy",
-      "iam:CreatePolicyVersion",
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
     ]
-    resources = ["arn:aws:iam::*:policy/github*"]
-    sid       = "IAMPolicyProvisioningActions"
+    resources = ["arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"]
+    sid       = "IAMOIDCProviderWriteActions"
   }
   statement {
     actions = [
-      "iam:GetPolicy",
-      "iam:GetPolicyVersion",
       "iam:ListEntitiesForPolicy",
       "iam:ListPolicies",
       "iam:ListPolicyVersions",
       "iam:ListUserPolicies",
     ]
     resources = ["*"]
+    sid       = "IAMPolicyListActions"
+  }
+  statement {
+    actions = [
+      "iam:GetPolicy",
+      "iam:GetPolicyVersion",
+    ]
+    resources = ["*"]
     sid       = "IAMPolicyReadActions"
   }
   statement {
-    actions   = ["iam:DeletePolicy", "iam:DeletePolicyVersion"]
-    resources = ["arn:aws:iam::*:policy/github*"]
-    sid       = "IAMPolicyCleanupActions"
-  }
-  statement {
     actions = [
-      "iam:AttachRolePolicy",
-      "iam:CreateRole",
-      "iam:PutRolePolicy",
-      "iam:UpdateRole",
-      "iam:UpdateRoleDescription",
-      "iam:UpdateAssumeRolePolicy",
+      "iam:CreatePolicy",
+      "iam:CreatePolicyVersion",
+      "iam:DeletePolicy",
+      "iam:DeletePolicyVersion",
     ]
-    resources = ["arn:aws:iam::*:role/github*"]
-    sid       = "IAMRoleProvisioningActions"
+    resources = ["arn:aws:iam::*:policy/github*"]
+    sid       = "IAMPolicyPermissionsManagementActions"
   }
   statement {
     actions = [
-      "iam:GetRole",
       "iam:ListAttachedRolePolicies",
       "iam:ListInstanceProfilesForRole",
       "iam:ListRolePolicies",
       "iam:ListRoles",
     ]
     resources = ["*"]
+    sid       = "IAMRoleListActions"
+  }
+  statement {
+    actions   = ["iam:GetRole"]
+    resources = ["*"]
     sid       = "IAMRoleReadActions"
   }
   statement {
     actions = [
-      "iam:DeleteRole",
+      "iam:AttachRolePolicy",
       "iam:DeleteRolePolicy",
       "iam:DetachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
     ]
     resources = ["arn:aws:iam::*:role/github*"]
-    sid       = "IAMRoleCleanupActions"
+    sid       = "IAMRolePermissionsManagementActions"
+  }
+  statement {
+    actions = [
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:UpdateRole",
+      "iam:UpdateRoleDescription",
+    ]
+    resources = ["arn:aws:iam::*:role/github*"]
+    sid       = "IAMRoleWriteActions"
   }
 }
 
