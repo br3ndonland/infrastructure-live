@@ -107,7 +107,7 @@ resource "aws_iam_policy" "github_actions_oidc_provisioning" {
   policy      = data.aws_iam_policy_document.github_actions_oidc_provisioning.json
 }
 
-data "aws_iam_policy_document" "s3_bucket_for_oidc" {
+data "aws_iam_policy_document" "s3_bucket_access_for_repo_with_oidc" {
   for_each = local.github_repos
   statement {
     actions   = ["s3:ListBucket"]
@@ -119,15 +119,15 @@ data "aws_iam_policy_document" "s3_bucket_for_oidc" {
   }
 }
 
-resource "aws_iam_policy" "s3_bucket_for_oidc" {
+resource "aws_iam_policy" "s3_bucket_access_for_repo_with_oidc" {
   for_each    = local.github_repos
   name        = "github-actions-s3-${each.value.repo}"
   description = "Allows access to a single S3 bucket with the given name"
-  policy      = data.aws_iam_policy_document.s3_bucket_for_oidc[each.key].json
+  policy      = data.aws_iam_policy_document.s3_bucket_access_for_repo_with_oidc[each.key].json
 }
 
-resource "aws_iam_role_policy_attachment" "s3_bucket_for_oidc" {
-  for_each   = aws_iam_policy.s3_bucket_for_oidc
+resource "aws_iam_role_policy_attachment" "s3_bucket_access_for_repo_with_oidc" {
+  for_each   = aws_iam_policy.s3_bucket_access_for_repo_with_oidc
   role       = module.github_actions_oidc.aws_iam_roles[each.key].name
   policy_arn = each.value.arn
 }
