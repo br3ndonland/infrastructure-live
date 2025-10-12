@@ -107,6 +107,11 @@ resource "aws_iam_policy" "github_actions_oidc_provisioning" {
   policy      = data.aws_iam_policy_document.github_actions_oidc_provisioning.json
 }
 
+resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning" {
+  role       = module.github_actions_oidc.aws_iam_roles["br3ndonland-infrastructure-live"].name
+  policy_arn = aws_iam_policy.github_actions_oidc_provisioning.arn
+}
+
 data "aws_iam_policy_document" "s3_bucket_access_for_repo_with_oidc" {
   for_each = local.github_repos
   statement {
