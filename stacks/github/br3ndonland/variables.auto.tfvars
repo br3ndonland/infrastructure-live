@@ -231,7 +231,7 @@ repos = {
         }
       }
     }
-    tofu-aws-github-actions-oidc = {
+    terraform-aws-github-actions-oidc = {
       visibility             = "public"
       description            = "OpenTofu module for connecting GitHub Actions and AWS with OIDC"
       protected_branch_names = ["main"]
