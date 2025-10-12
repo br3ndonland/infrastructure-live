@@ -117,10 +117,17 @@ data "aws_iam_policy_document" "s3_bucket_access_for_repo_with_oidc" {
   statement {
     actions   = ["s3:ListBucket"]
     resources = ["arn:aws:s3:::${each.key}", "arn:aws:s3:::${each.value.repo}"]
+    sid       = "S3BucketListActions"
   }
   statement {
-    actions   = ["s3:DeleteObject", "s3:GetObject", "s3:PutObject"]
+    actions   = ["s3:GetObject"]
     resources = ["arn:aws:s3:::${each.key}/*", "arn:aws:s3:::${each.value.repo}/*"]
+    sid       = "S3ObjectReadActions"
+  }
+  statement {
+    actions   = ["s3:DeleteObject", "s3:PutObject"]
+    resources = ["arn:aws:s3:::${each.key}/*", "arn:aws:s3:::${each.value.repo}/*"]
+    sid       = "S3ObjectWriteActions"
   }
 }
 
