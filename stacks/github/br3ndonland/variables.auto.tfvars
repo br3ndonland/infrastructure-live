@@ -156,7 +156,6 @@ repos = {
         "python",
         "docker",
         "hatch",
-        "poetry",
         "gunicorn",
         "actions",
         "asgi",
@@ -164,7 +163,6 @@ repos = {
         "starlette",
         "fastapi",
         "github-packages",
-        "python-poetry",
         "github-container-registry",
         "ghcr",
       ]
