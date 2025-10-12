@@ -1,0 +1,73 @@
+# https://mise.jdx.dev/configuration.html
+[settings]
+activate_aggressive = true
+
+[tasks.check]
+depends = ["prettier:check", "shellcheck", "shfmt:check", "tofu:check"]
+description = "Run code quality checks"
+
+[tasks.format]
+depends = ["prettier:format", "shfmt:format", "tofu:format"]
+description = "Run code formatters"
+
+[tasks."prettier:check"]
+description = "Check web code formatting with Prettier"
+run = "prettier --check ."
+
+[tasks."prettier:format"]
+description = "Format web code with Prettier"
+run = "prettier --write ."
+
+[tasks.shellcheck]
+description = "Check shell scripts with ShellCheck"
+run = """
+#!/usr/bin/env bash
+
+shopt -s dotglob globstar nullglob
+set -- **/*.{bash,sh}*
+if [ -n "$1" ]; then
+  printf "Found the following files:\n"
+  printf "%s\n" "$@"
+  shellcheck "$@"
+else
+  echo "No shell scripts for ShellCheck to check."
+fi
+"""
+
+[tasks."shfmt:check"]
+description = "Check shell script formatting with shfmt"
+run = """
+# Checking shell script formatting with shfmt.
+files=$(shfmt -f .)
+if [ -n "$files" ]; then
+  printf "Found the following files:\n%s\n" "$files"
+  shfmt -d .
+else
+  echo "No shell scripts for shfmt to check."
+fi
+"""
+
+[tasks."shfmt:format"]
+description = "Format shell scripts with shfmt"
+run = "shfmt -w ."
+
+[tasks."tofu:check"]
+description = "Check formatting of OpenTofu configuration files"
+run = "tofu fmt -check -diff -recursive"
+
+[tasks."tofu:format"]
+description = "Format OpenTofu configuration files"
+run = "tofu fmt -recursive"
+
+[tools]
+# https://mise.jdx.dev/configuration.html#scopes
+# https://mise.jdx.dev/dev-tools/
+#
+# registry tools from core backend
+node = "24"
+# registry tools from other backends
+opentofu = "prefix:1.10"
+shellcheck = "prefix:0.11"
+shfmt = "prefix:3.12"
+# non-registry tools from specific backends
+"npm:prettier" = "prefix:3"
