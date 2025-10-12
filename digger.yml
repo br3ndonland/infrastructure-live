@@ -1,0 +1,28 @@
+projects:
+  - name: aws-br3ndonland-github-actions-oidc
+    dir: stacks/aws/br3ndonland/github-actions-oidc
+    opentofu: true
+  - name: github-br3ndonland
+    dir: stacks/github/br3ndonland
+    opentofu: true
+    workflow: github-br3ndonland
+telemetry: false
+workflows:
+  aws-br3ndonland-github-actions-oidc:
+    workflow_configuration:
+      on_pull_request_pushed: [digger plan]
+      on_pull_request_closed: [digger unlock]
+      on_commit_to_default: [digger apply]
+  github-br3ndonland:
+    env_vars:
+      commands:
+        - name: TF_VAR_op_service_account_token
+          value_from: OP_SERVICE_ACCOUNT_TOKEN
+        - name: TF_VAR_op_vault_item_github_token
+          value_from: OP_VAULT_ITEM_GITHUB_TOKEN
+        - name: TF_VAR_op_vault
+          value_from: OP_VAULT
+    workflow_configuration:
+      on_pull_request_pushed: [digger plan]
+      on_pull_request_closed: [digger unlock]
+      on_commit_to_default: [digger apply]

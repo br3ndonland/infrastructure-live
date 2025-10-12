@@ -1,0 +1,47 @@
+name: digger
+
+on:
+  pull_request:
+  # TODO: Digger does not support push events.
+  # https://github.com/diggerhq/digger/issues/891
+  # https://github.com/diggerhq/digger/issues/2243
+  # push:
+  #   branches: [main]
+  #   tags: ["*"]
+  workflow_dispatch:
+
+jobs:
+  digger:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      attestations: read
+      checks: write
+      contents: write
+      deployments: write
+      discussions: read
+      id-token: write
+      issues: read
+      models: read
+      packages: read
+      pages: read
+      pull-requests: write
+      security-events: read
+      statuses: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: jdx/mise-action@v3
+      - run: mise run check --jobs 1
+      - uses: diggerhq/digger@vLatest
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-role-to-assume: ${{ vars.AWS_IAM_ROLE_ARN }}
+          setup-aws: true
+          setup-opentofu: false
+          setup-terraform: false
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OP_SERVICE_ACCOUNT_TOKEN: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+          OP_VAULT_ITEM_GITHUB_TOKEN: ${{ vars.OP_VAULT_ITEM_GITHUB_TOKEN }}
+          OP_VAULT: ${{ vars.OP_VAULT }}
