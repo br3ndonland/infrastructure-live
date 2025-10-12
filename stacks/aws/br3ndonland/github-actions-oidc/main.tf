@@ -9,7 +9,7 @@ locals {
 }
 
 module "github_actions_oidc" {
-  source       = "github.com/br3ndonland/tofu-aws-github-actions-oidc"
+  source       = "github.com/br3ndonland/terraform-aws-github-actions-oidc?ref=0.7.0"
   github_repos = var.github_repos_with_oidc
 }
 
