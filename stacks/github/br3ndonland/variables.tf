@@ -14,6 +14,11 @@ variable "op_vault_item_github_token" {
   type        = string
 }
 
+variable "s3_backend_bucket" {
+  description = "Name of bucket used to store OpenTofu state for S3 backend"
+  type        = string
+}
+
 variable "owner" {
   description = "GitHub owner (user or organization) for the workspace"
   type        = string
