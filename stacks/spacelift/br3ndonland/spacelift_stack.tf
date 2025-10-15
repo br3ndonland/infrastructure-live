@@ -12,7 +12,7 @@ resource "spacelift_stack" "aws-br3ndonland-github-actions-oidc" {
   project_root                     = "stacks/aws/br3ndonland/github-actions-oidc"
   protect_from_deletion            = false
   repository                       = var.github_repo
-  space_id                         = spacelift_space.in_child_of_root_space["br3ndonland-aws"].id
+  space_id                         = spacelift_space.in_root_space["br3ndonland-aws"].id
   terraform_workflow_tool          = "OPEN_TOFU"
   terraform_version                = var.opentofu_version
 }
@@ -31,7 +31,7 @@ resource "spacelift_stack" "aws-br3ndonland-spacelift-oidc" {
   project_root                     = "stacks/aws/br3ndonland/spacelift-oidc"
   protect_from_deletion            = false
   repository                       = var.github_repo
-  space_id                         = spacelift_space.in_child_of_root_space["br3ndonland-aws"].id
+  space_id                         = spacelift_space.in_root_space["br3ndonland-aws"].id
   terraform_workflow_tool          = "OPEN_TOFU"
   terraform_version                = var.opentofu_version
 }
@@ -50,7 +50,7 @@ resource "spacelift_stack" "github-br3ndonland" {
   project_root                     = "stacks/github/br3ndonland"
   protect_from_deletion            = true
   repository                       = var.github_repo
-  space_id                         = spacelift_space.in_child_of_root_space["br3ndonland-github"].id
+  space_id                         = spacelift_space.in_root_space["br3ndonland-github"].id
   terraform_workflow_tool          = "OPEN_TOFU"
   terraform_version                = var.opentofu_version
 }
@@ -69,7 +69,7 @@ resource "spacelift_stack" "spacelift-br3ndonland" {
   project_root                     = "stacks/spacelift/br3ndonland"
   protect_from_deletion            = true
   repository                       = var.github_repo
-  space_id                         = spacelift_space.in_child_of_root_space["br3ndonland-spacelift"].id
+  space_id                         = spacelift_space.in_root_space["br3ndonland-spacelift"].id
   terraform_workflow_tool          = "OPEN_TOFU"
   terraform_version                = var.opentofu_version
 }
