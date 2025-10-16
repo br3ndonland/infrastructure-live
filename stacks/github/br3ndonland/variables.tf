@@ -19,6 +19,11 @@ variable "s3_backend_bucket_name" {
   type        = string
 }
 
+variable "s3_backend_bucket_region" {
+  description = "Region of bucket used to store OpenTofu state for S3 backend"
+  type        = string
+}
+
 variable "owner" {
   description = "GitHub owner (user or organization) for the workspace"
   type        = string
