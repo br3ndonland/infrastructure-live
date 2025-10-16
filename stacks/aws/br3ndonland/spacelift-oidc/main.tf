@@ -33,7 +33,7 @@ data "aws_iam_policy_document" "s3_backend_bucket_access_for_spacelift_space" {
   for_each = toset(var.spacelift_spaces)
   statement {
     actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket}"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}"]
     sid       = "S3BucketListActions"
     condition {
       test     = "StringLike"
@@ -43,12 +43,12 @@ data "aws_iam_policy_document" "s3_backend_bucket_access_for_spacelift_space" {
   }
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket}/stacks/${each.value}/*"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value}/*"]
     sid       = "S3ObjectReadActions"
   }
   statement {
     actions   = ["s3:DeleteObject", "s3:PutObject"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket}/stacks/${each.value}/*"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value}/*"]
     sid       = "S3ObjectWriteActions"
   }
 }
@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_spacelif
 data "aws_iam_policy_document" "s3_backend_bucket_access_for_aws_remote_state" {
   statement {
     actions   = ["s3:ListBucket"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket}"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}"]
     sid       = "S3BucketListActions"
     condition {
       test     = "StringLike"
@@ -79,7 +79,7 @@ data "aws_iam_policy_document" "s3_backend_bucket_access_for_aws_remote_state" {
   }
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket}/stacks/aws/*"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/aws/*"]
     sid       = "S3ObjectReadActions"
   }
 }

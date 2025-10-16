@@ -3,7 +3,7 @@ variable "aws_provider_region" {
   type        = string
 }
 
-variable "s3_backend_bucket" {
+variable "s3_backend_bucket_name" {
   description = "Name of bucket used to store OpenTofu state for S3 backend"
   type        = string
 }
