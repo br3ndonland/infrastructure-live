@@ -66,12 +66,41 @@ resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_spacelif
   role       = each.value.aws_iam_role.name
 }
 
+data "aws_iam_policy_document" "s3_backend_bucket_access_for_aws_remote_state" {
+  statement {
+    actions   = ["s3:ListBucket"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket}"]
+    sid       = "S3BucketListActions"
+    condition {
+      test     = "StringLike"
+      variable = "s3:prefix"
+      values   = ["stacks/aws", "stacks/aws/*"]
+    }
+  }
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket}/stacks/aws/*"]
+    sid       = "S3ObjectReadActions"
+  }
+}
+
+resource "aws_iam_policy" "s3_backend_bucket_access_for_aws_remote_state" {
+  name = "s3-backend-bucket-access-for-aws-remote-state"
+  description = join(" ", [
+    "Allows AWS IAM roles used for other stacks to access remote state from AWS stacks.",
+    "This access is needed for backend and provider configurations,",
+    "as well as for provisioning spacelift_aws_integration resources."
+  ])
+  policy = data.aws_iam_policy_document.s3_backend_bucket_access_for_aws_remote_state.json
+}
+
 resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_aws_remote_state" {
-  # This attachment allows the AWS IAM role used for the Spacelift space to access state from AWS stacks.
-  # This access is needed for provisioning `spacelift_aws_integration` resources.
-  for_each   = toset(var.spacelift_organizations)
-  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_spacelift_space["aws"].arn
-  role       = local.aws_iam_roles_for_spacelift_oidc["${each.value}-spacelift"].aws_iam_role.name
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift_oidc :
+    key => value if !endswith(key, "-aws")
+  }
+  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_aws_remote_state.arn
+  role       = each.value.aws_iam_role.name
 }
 
 data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
