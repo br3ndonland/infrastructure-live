@@ -27,3 +27,21 @@ resource "spacelift_environment_variable" "op_vault_item_github_token" {
     ignore_changes = [value]
   }
 }
+
+resource "spacelift_environment_variable" "s3_backend_bucket_role_arn" {
+  for_each    = spacelift_aws_integration.oidc
+  context_id  = spacelift_context.space[each.key].id
+  description = "ARN of role used to access the OpenTofu S3 backend bucket"
+  name        = "TF_VAR_s3_backend_bucket_role_arn"
+  value       = each.value.role_arn
+  write_only  = false
+}
+
+resource "spacelift_environment_variable" "s3_backend_bucket_web_identity_token_file" {
+  for_each    = spacelift_aws_integration.oidc
+  context_id  = spacelift_context.space[each.key].id
+  description = "Path to OIDC web identity token file used to access the OpenTofu S3 backend bucket"
+  name        = "TF_VAR_s3_backend_bucket_web_identity_token_file"
+  value       = "/mnt/workspace/spacelift.oidc"
+  write_only  = false
+}
