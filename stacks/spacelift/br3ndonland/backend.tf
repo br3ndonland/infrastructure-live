@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
     bucket       = var.s3_backend_bucket_name
-    key          = "stacks/spacelift/br3ndonland/terraform.tfstate"
+    key          = var.s3_backend_bucket_key
     region       = var.s3_backend_bucket_region
     use_lockfile = true
   }
@@ -13,7 +13,7 @@ data "terraform_remote_state" "spacelift_oidc" {
   backend = "s3"
   config = {
     bucket = var.s3_backend_bucket_name
-    key    = "stacks/aws/br3ndonland/spacelift-oidc/terraform.tfstate"
+    key    = var.s3_backend_bucket_key_spacelift_oidc
     region = var.s3_backend_bucket_region
   }
 }
