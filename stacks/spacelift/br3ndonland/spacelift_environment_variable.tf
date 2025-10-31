@@ -45,3 +45,33 @@ resource "spacelift_environment_variable" "s3_backend_bucket_web_identity_token_
   value       = "/mnt/workspace/spacelift.oidc"
   write_only  = false
 }
+
+resource "spacelift_environment_variable" "SPACELIFT_API_KEY_ENDPOINT" {
+  description = "Endpoint for API key used by Spacelift administrative stack"
+  name        = "SPACELIFT_API_KEY_ENDPOINT"
+  stack_id    = spacelift_stack.spacelift-br3ndonland.id
+  value       = "https://${var.spacelift_organization}.app.spacelift.io"
+  write_only  = false
+}
+
+resource "spacelift_environment_variable" "SPACELIFT_API_KEY_ID" {
+  description = "ID of API key used by Spacelift administrative stack"
+  name        = "SPACELIFT_API_KEY_ID"
+  stack_id    = spacelift_stack.spacelift-br3ndonland.id
+  write_only  = false
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
+
+resource "spacelift_environment_variable" "SPACELIFT_API_KEY_SECRET" {
+  description = "Secret portion of API key used by Spacelift administrative stack"
+  name        = "SPACELIFT_API_KEY_SECRET"
+  stack_id    = spacelift_stack.spacelift-br3ndonland.id
+  write_only  = true
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+}
