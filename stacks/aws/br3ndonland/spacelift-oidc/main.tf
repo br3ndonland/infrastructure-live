@@ -215,3 +215,114 @@ resource "aws_iam_role_policy_attachment" "spacelift_oidc_provisioning" {
   policy_arn = aws_iam_policy.spacelift_oidc_provisioning[each.value].arn
   role       = module.spacelift_oidc[each.value].aws_iam_roles["spacelift-oidc-${each.value}-aws"].name
 }
+
+data "aws_iam_policy_document" "github_actions_oidc_provisioning" {
+  statement {
+    actions = [
+      "iam:ListOpenIDConnectProviders",
+      "iam:ListOpenIDConnectProviderTags",
+    ]
+    resources = ["*"]
+    sid       = "IAMOIDCProviderListActions"
+  }
+  statement {
+    actions   = ["iam:GetOpenIDConnectProvider"]
+    resources = ["*"]
+    sid       = "IAMOIDCProviderReadActions"
+  }
+  statement {
+    actions = [
+      "iam:TagOpenIDConnectProvider",
+      "iam:UntagOpenIDConnectProvider",
+    ]
+    resources = ["arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"]
+    sid       = "IAMOIDCProviderTaggingActions"
+  }
+  statement {
+    actions = [
+      "iam:AddClientIDToOpenIDConnectProvider",
+      "iam:CreateOpenIDConnectProvider",
+      "iam:DeleteOpenIDConnectProvider",
+      "iam:RemoveClientIDFromOpenIDConnectProvider",
+      "iam:UpdateOpenIDConnectProviderThumbprint",
+    ]
+    resources = ["arn:aws:iam::*:oidc-provider/token.actions.githubusercontent.com"]
+    sid       = "IAMOIDCProviderWriteActions"
+  }
+  statement {
+    actions = [
+      "iam:ListEntitiesForPolicy",
+      "iam:ListPolicies",
+      "iam:ListPolicyVersions",
+      "iam:ListUserPolicies",
+    ]
+    resources = ["*"]
+    sid       = "IAMPolicyListActions"
+  }
+  statement {
+    actions = [
+      "iam:GetPolicy",
+      "iam:GetPolicyVersion",
+    ]
+    resources = ["*"]
+    sid       = "IAMPolicyReadActions"
+  }
+  statement {
+    actions = [
+      "iam:CreatePolicy",
+      "iam:CreatePolicyVersion",
+      "iam:DeletePolicy",
+      "iam:DeletePolicyVersion",
+    ]
+    resources = ["arn:aws:iam::*:policy/github*"]
+    sid       = "IAMPolicyPermissionsManagementActions"
+  }
+  statement {
+    actions = [
+      "iam:ListAttachedRolePolicies",
+      "iam:ListInstanceProfilesForRole",
+      "iam:ListRolePolicies",
+      "iam:ListRoles",
+    ]
+    resources = ["*"]
+    sid       = "IAMRoleListActions"
+  }
+  statement {
+    actions   = ["iam:GetRole"]
+    resources = ["*"]
+    sid       = "IAMRoleReadActions"
+  }
+  statement {
+    actions = [
+      "iam:AttachRolePolicy",
+      "iam:DeleteRolePolicy",
+      "iam:DetachRolePolicy",
+      "iam:PutRolePolicy",
+      "iam:UpdateAssumeRolePolicy",
+    ]
+    resources = ["arn:aws:iam::*:role/github*"]
+    sid       = "IAMRolePermissionsManagementActions"
+  }
+  statement {
+    actions = [
+      "iam:CreateRole",
+      "iam:DeleteRole",
+      "iam:UpdateRole",
+      "iam:UpdateRoleDescription",
+    ]
+    resources = ["arn:aws:iam::*:role/github*"]
+    sid       = "IAMRoleWriteActions"
+  }
+}
+
+resource "aws_iam_policy" "github_actions_oidc_provisioning" {
+  description = "Allows provisioning of resources for GitHub Actions OIDC (OpenID Connect)."
+  name        = "github-actions-oidc-provisioning"
+  policy      = data.aws_iam_policy_document.github_actions_oidc_provisioning.json
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning" {
+  for_each   = toset(var.spacelift_organizations)
+  policy_arn = aws_iam_policy.github_actions_oidc_provisioning.arn
+  role       = module.spacelift_oidc[each.value].aws_iam_roles["spacelift-oidc-${each.value}-aws"].name
+}
