@@ -10,6 +10,8 @@ locals {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 module "spacelift_oidc" {
   for_each = toset(var.spacelift_organizations)
   source   = "../../../../modules/aws-spacelift-oidc"

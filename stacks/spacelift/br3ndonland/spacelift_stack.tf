@@ -36,6 +36,7 @@ resource "spacelift_stack" "aws-br3ndonland-spacelift-oidc" {
   terraform_version                = var.opentofu_version
 }
 
+# TODO: Waiting on approval for custom ECR alias br3ndonland (a1j0z0y3 is the default alias).
 resource "spacelift_stack" "github-br3ndonland" {
   additional_project_globs         = null
   administrative                   = false
@@ -50,6 +51,7 @@ resource "spacelift_stack" "github-br3ndonland" {
   project_root                     = "stacks/github/br3ndonland"
   protect_from_deletion            = true
   repository                       = var.github_repo
+  runner_image                     = "public.ecr.aws/a1j0z0y3/spacelift-runner-terraform:latest"
   space_id                         = spacelift_space.in_root_space["br3ndonland-github"].id
   terraform_workflow_tool          = "OPEN_TOFU"
   terraform_version                = var.opentofu_version

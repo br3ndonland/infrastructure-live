@@ -26,6 +26,18 @@ module "github_actions_oidc" {
   github_repos = var.github_repos_with_oidc
 }
 
+resource "aws_iam_role_policy_attachment" "github_actions_ecr_public" {
+  for_each = {
+    for key, value in module.github_actions_oidc["aws_iam_roles"] :
+    key => value if strcontains(key, "infrastructure-live")
+  }
+  policy_arn = join("", [
+    "arn:aws:iam::aws:policy/AmazonElasticContainerRegistryPublic",
+    strcontains(each.key, "read") ? "ReadOnly" : "PowerUser",
+  ])
+  role = each.value.name
+}
+
 resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning" {
   role = module.github_actions_oidc.aws_iam_roles[
     "br3ndonland-infrastructure-live-github-actions-oidc-br3ndonland-infrastructure-live-write"
