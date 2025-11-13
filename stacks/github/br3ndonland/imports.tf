@@ -16,6 +16,10 @@ locals {
       branches = 7935911
       tags     = 7935929
     }
+    infrastructure-live = {
+      branches = 9377329
+      tags     = 9377342
+    }
     template-python = {
       branches = 7951421
       tags     = 7951424
@@ -49,4 +53,14 @@ import {
 import {
   id = "crp"
   to = github_branch_default.default["crp"]
+}
+
+import {
+  id = "infrastructure-live"
+  to = github_repository.repo["infrastructure-live"]
+}
+
+import {
+  id = "infrastructure-live"
+  to = github_branch_default.default["infrastructure-live"]
 }

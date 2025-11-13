@@ -193,6 +193,25 @@ repos = {
         }
       }
     }
+    infrastructure-live = {
+      visibility             = "public"
+      description            = "Deployed cloud infrastructure"
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
+      required_status_checks = {
+        branches = {
+          build = 15368
+          check = 15368
+        }
+        tags = {
+          build = 15368
+          check = 15368
+        }
+      }
+    }
     R-guide = {
       visibility             = "public"
       description            = "A quick reference guide and sample code for statistical programming in R"
