@@ -104,12 +104,12 @@ jobs:
           # https://github.com/docker/build-push-action/blob/9e436ba/src/context.ts#L154-L156
           annotations: |
             org.opencontainers.image.base.name=ghcr.io/spacelift-io/runner-terraform:latest
-            org.opencontainers.image.description=Spacelift runner image with additional utilities
+            org.opencontainers.image.description=Spacelift runner image with additional utilities, including the 1Password CLI.
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.title=spacelift-runner-terraform
           labels: |
             org.opencontainers.image.base.name=ghcr.io/spacelift-io/runner-terraform:latest
-            org.opencontainers.image.description=Spacelift runner image with additional utilities
+            org.opencontainers.image.description=Spacelift runner image with additional utilities, including the 1Password CLI.
             org.opencontainers.image.licenses=Apache-2.0
             org.opencontainers.image.title=spacelift-runner-terraform
         env:
