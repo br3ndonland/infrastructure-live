@@ -84,10 +84,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@318604b99e75e41977312d83839a89be02ca4893 # v5.9.0
         with:
-          # TODO: Waiting on approval for custom ECR alias br3ndonland (a1j0z0y3 is the default alias).
           images: |
             ghcr.io/${{ github.repository_owner }}/spacelift-runner-terraform
-            public.ecr.aws/a1j0z0y3/spacelift-runner-terraform
+            public.ecr.aws/${{ github.repository_owner }}/spacelift-runner-terraform
           flavor: |
             latest=${{ github.ref_name == 'main' || github.ref_type == 'tag' }}
           tags: |
