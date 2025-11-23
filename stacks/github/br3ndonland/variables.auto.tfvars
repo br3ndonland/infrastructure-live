@@ -131,11 +131,11 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.12)" = 15368
+          "ci (3.13)" = 15368
           "Vercel"    = 8329
         }
         tags = {
-          "ci (3.12)" = 15368
+          "ci (3.13)" = 15368
           "Vercel"    = 8329
         }
       }
@@ -178,18 +178,18 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "docker (alpine, 3.12)"        = 15368
-          "docker (bookworm, 3.12)"      = 15368
-          "docker (slim-bookworm, 3.12)" = 15368
-          "python (3.12)"                = 15368
-          "Vercel"                       = 8329
+          "docker (alpine, 3.13)"      = 15368
+          "docker (trixie, 3.13)"      = 15368
+          "docker (slim-trixie, 3.13)" = 15368
+          "python (3.13)"              = 15368
+          "Vercel"                     = 8329
         }
         tags = {
-          "docker (alpine, 3.12)"        = 15368
-          "docker (bookworm, 3.12)"      = 15368
-          "docker (slim-bookworm, 3.12)" = 15368
-          "python (3.12)"                = 15368
-          "Vercel"                       = 8329
+          "docker (alpine, 3.13)"      = 15368
+          "docker (trixie, 3.13)"      = 15368
+          "docker (slim-trixie, 3.13)" = 15368
+          "python (3.13)"              = 15368
+          "Vercel"                     = 8329
         }
       }
     }
