@@ -4,4 +4,6 @@ s3_backend_bucket_key    = "stacks/aws/br3ndonland/spacelift-oidc/terraform.tfst
 s3_backend_bucket_name   = "br3ndonland-infrastructure-live"
 s3_backend_bucket_region = "us-east-2"
 spacelift_organizations  = ["br3ndonland"]
-spacelift_spaces         = ["aws", "github", "spacelift"]
+spacelift_spaces = {
+  br3ndonland = ["aws", "github", "spacelift"]
+}

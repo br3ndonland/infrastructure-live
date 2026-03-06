@@ -44,6 +44,6 @@ variable "spacelift_organizations" {
 }
 
 variable "spacelift_spaces" {
-  description = "Set of Spacelift space names for which to configure OpenID Connect (OIDC)"
-  type        = set(string)
+  description = "Spacelift space names for each organization"
+  type        = map(set(string))
 }

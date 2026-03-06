@@ -1,38 +1,89 @@
 locals {
-  aws_iam_roles_for_spacelift_oidc = {
-    for pair in setproduct(var.spacelift_organizations, var.spacelift_spaces) :
-    "${pair[0]}-${pair[1]}" => {
-      aws_account_alias      = var.aws_account_alias
-      aws_iam_role           = module.spacelift_oidc[pair[0]].aws_iam_roles["spacelift-oidc-${pair[0]}-${pair[1]}"]
-      spacelift_organization = pair[0]
-      spacelift_space        = pair[1]
+  spacelift_organization_spaces = merge([
+    for organization, spaces in var.spacelift_spaces : {
+      for space in spaces : "${organization}-${space}" => {
+        aws_account_alias      = var.aws_account_alias
+        spacelift_organization = organization
+        spacelift_space        = space
+      }
+    }
+  ]...)
+
+  aws_iam_roles_for_spacelift = {
+    for key, value in local.spacelift_organization_spaces : key => {
+      aws_account_alias = value.aws_account_alias
+      aws_iam_role_external_id = {
+        arn  = aws_iam_role.external_id[key].arn
+        name = aws_iam_role.external_id[key].name
+      }
+      aws_iam_role_oidc      = module.spacelift_oidc[value.spacelift_organization].aws_iam_roles["spacelift-oidc-${key}"]
+      spacelift_organization = value.spacelift_organization
+      spacelift_space        = value.spacelift_space
     }
   }
 }
 
 data "aws_caller_identity" "current" {}
 
+data "aws_iam_policy_document" "external_id_assume_role_policy" {
+  for_each = local.spacelift_organization_spaces
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["324880187172"]
+    }
+
+    condition {
+      test     = "StringLike"
+      variable = "sts:ExternalId"
+      values   = ["${each.value.spacelift_organization}@*@${each.value.spacelift_space}-${each.value.aws_account_alias}*@*"]
+    }
+  }
+}
+
+resource "aws_iam_role" "external_id" {
+  for_each           = local.spacelift_organization_spaces
+  assume_role_policy = data.aws_iam_policy_document.external_id_assume_role_policy[each.key].json
+  description        = "Grants access to spaces that manage ${each.value.spacelift_space} resources."
+  name               = "spacelift-external-id-${each.key}"
+}
+
 module "spacelift_oidc" {
-  for_each = toset(var.spacelift_organizations)
+  for_each = var.spacelift_organizations
   source   = "../../../../modules/aws-spacelift-oidc"
 
   aws_iam_role_claims = {
-    for space in var.spacelift_spaces : "spacelift-oidc-${each.value}-${space}" => {
+    for space in var.spacelift_spaces[each.key] :
+    "spacelift-oidc-${each.key}-${space}" => {
       claims           = ["space:${space}-*"]
       role_description = "Grants access to spaces that manage ${space} resources."
     }
   }
-  spacelift_organization = each.value
+  spacelift_organization = each.key
+}
+
+resource "aws_iam_role_policy_attachment" "spacelift_external_id_power_user" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
+  policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
+  role       = each.value.aws_iam_role_external_id.name
 }
 
 resource "aws_iam_role_policy_attachment" "spacelift_oidc_power_user" {
-  for_each   = toset(var.spacelift_organizations)
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
   policy_arn = "arn:aws:iam::aws:policy/PowerUserAccess"
-  role       = local.aws_iam_roles_for_spacelift_oidc["${each.value}-aws"].aws_iam_role.name
+  role       = each.value.aws_iam_role_oidc.name
 }
 
 data "aws_iam_policy_document" "s3_backend_bucket_access_for_spacelift_space" {
-  for_each = toset(var.spacelift_spaces)
+  for_each = local.aws_iam_roles_for_spacelift
   statement {
     actions   = ["s3:ListBucket"]
     resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}"]
@@ -40,32 +91,38 @@ data "aws_iam_policy_document" "s3_backend_bucket_access_for_spacelift_space" {
     condition {
       test     = "StringLike"
       variable = "s3:prefix"
-      values   = ["stacks/${each.value}", "stacks/${each.value}/*"]
+      values   = ["stacks/${each.value.spacelift_space}", "stacks/${each.value.spacelift_space}/*"]
     }
   }
   statement {
     actions   = ["s3:GetObject"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value}/*"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value.spacelift_space}/*"]
     sid       = "S3ObjectReadActions"
   }
   statement {
     actions   = ["s3:DeleteObject", "s3:PutObject"]
-    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value}/*"]
+    resources = ["arn:aws:s3:::${var.s3_backend_bucket_name}/stacks/${each.value.spacelift_space}/*"]
     sid       = "S3ObjectWriteActions"
   }
 }
 
 resource "aws_iam_policy" "s3_backend_bucket_access_for_spacelift_space" {
-  for_each    = toset(var.spacelift_spaces)
-  name        = "s3-backend-bucket-access-for-${each.value}-stacks"
+  for_each    = local.aws_iam_roles_for_spacelift
+  name        = "s3-backend-bucket-access-for-${each.value.spacelift_space}-stacks"
   description = "Allows the Spacelift OIDC integration for each space to access its state in S3."
-  policy      = data.aws_iam_policy_document.s3_backend_bucket_access_for_spacelift_space[each.value].json
+  policy      = data.aws_iam_policy_document.s3_backend_bucket_access_for_spacelift_space[each.key].json
 }
 
-resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_spacelift_space" {
-  for_each   = local.aws_iam_roles_for_spacelift_oidc
-  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_spacelift_space[each.value.spacelift_space].arn
-  role       = each.value.aws_iam_role.name
+resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_spacelift_space_for_external_id_role" {
+  for_each   = local.aws_iam_roles_for_spacelift
+  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_spacelift_space[each.key].arn
+  role       = each.value.aws_iam_role_external_id.name
+}
+
+resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_spacelift_space_for_oidc_role" {
+  for_each   = local.aws_iam_roles_for_spacelift
+  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_spacelift_space[each.key].arn
+  role       = each.value.aws_iam_role_oidc.name
 }
 
 data "aws_iam_policy_document" "s3_backend_bucket_access_for_aws_remote_state" {
@@ -96,13 +153,22 @@ resource "aws_iam_policy" "s3_backend_bucket_access_for_aws_remote_state" {
   policy = data.aws_iam_policy_document.s3_backend_bucket_access_for_aws_remote_state.json
 }
 
-resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_aws_remote_state" {
+resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_aws_remote_state_for_external_id_role" {
   for_each = {
-    for key, value in local.aws_iam_roles_for_spacelift_oidc :
+    for key, value in local.aws_iam_roles_for_spacelift :
     key => value if !endswith(key, "-aws")
   }
   policy_arn = aws_iam_policy.s3_backend_bucket_access_for_aws_remote_state.arn
-  role       = each.value.aws_iam_role.name
+  role       = each.value.aws_iam_role_external_id.name
+}
+
+resource "aws_iam_role_policy_attachment" "s3_backend_bucket_access_for_aws_remote_state_for_oidc_role" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if !endswith(key, "-aws")
+  }
+  policy_arn = aws_iam_policy.s3_backend_bucket_access_for_aws_remote_state.arn
+  role       = each.value.aws_iam_role_oidc.name
 }
 
 data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
@@ -125,7 +191,7 @@ data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
       "iam:TagOpenIDConnectProvider",
       "iam:UntagOpenIDConnectProvider",
     ]
-    resources = ["arn:aws:iam::*:oidc-provider/${each.value}.app.spacelift.io"]
+    resources = ["arn:aws:iam::*:oidc-provider/${each.key}.app.spacelift.io"]
     sid       = "IAMOIDCProviderTaggingActions"
   }
   statement {
@@ -136,7 +202,7 @@ data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
       "iam:RemoveClientIDFromOpenIDConnectProvider",
       "iam:UpdateOpenIDConnectProviderThumbprint",
     ]
-    resources = ["arn:aws:iam::*:oidc-provider/${each.value}.app.spacelift.io"]
+    resources = ["arn:aws:iam::*:oidc-provider/${each.key}.app.spacelift.io"]
     sid       = "IAMOIDCProviderWriteActions"
   }
   statement {
@@ -190,7 +256,7 @@ data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
       "iam:PutRolePolicy",
       "iam:UpdateAssumeRolePolicy",
     ]
-    resources = ["arn:aws:iam::*:role/spacelift-oidc-${each.value}*"]
+    resources = ["arn:aws:iam::*:role/spacelift-oidc-${each.key}*"]
     sid       = "IAMRolePermissionsManagementActions"
   }
   statement {
@@ -200,7 +266,7 @@ data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
       "iam:UpdateRole",
       "iam:UpdateRoleDescription",
     ]
-    resources = ["arn:aws:iam::*:role/spacelift-oidc-${each.value}*"]
+    resources = ["arn:aws:iam::*:role/spacelift-oidc-${each.key}*"]
     sid       = "IAMRoleWriteActions"
   }
 }
@@ -208,14 +274,26 @@ data "aws_iam_policy_document" "spacelift_oidc_provisioning" {
 resource "aws_iam_policy" "spacelift_oidc_provisioning" {
   for_each    = toset(var.spacelift_organizations)
   description = "Allows provisioning of resources for Spacelift OIDC (OpenID Connect)."
-  name        = "spacelift-oidc-provisioning-${each.value}"
+  name        = "spacelift-oidc-provisioning-${each.key}"
   policy      = data.aws_iam_policy_document.spacelift_oidc_provisioning[each.value].json
 }
 
-resource "aws_iam_role_policy_attachment" "spacelift_oidc_provisioning" {
-  for_each   = toset(var.spacelift_organizations)
-  policy_arn = aws_iam_policy.spacelift_oidc_provisioning[each.value].arn
-  role       = module.spacelift_oidc[each.value].aws_iam_roles["spacelift-oidc-${each.value}-aws"].name
+resource "aws_iam_role_policy_attachment" "spacelift_oidc_provisioning_for_external_id_role" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
+  policy_arn = aws_iam_policy.spacelift_oidc_provisioning[each.value.spacelift_organization].arn
+  role       = each.value.aws_iam_role_external_id.name
+}
+
+resource "aws_iam_role_policy_attachment" "spacelift_oidc_provisioning_for_oidc_role" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
+  policy_arn = aws_iam_policy.spacelift_oidc_provisioning[each.value.spacelift_organization].arn
+  role       = each.value.aws_iam_role_oidc.name
 }
 
 data "aws_iam_policy_document" "github_actions_oidc_provisioning" {
@@ -323,8 +401,20 @@ resource "aws_iam_policy" "github_actions_oidc_provisioning" {
   policy      = data.aws_iam_policy_document.github_actions_oidc_provisioning.json
 }
 
-resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning" {
-  for_each   = toset(var.spacelift_organizations)
+resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning_for_external_id_role" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
   policy_arn = aws_iam_policy.github_actions_oidc_provisioning.arn
-  role       = module.spacelift_oidc[each.value].aws_iam_roles["spacelift-oidc-${each.value}-aws"].name
+  role       = each.value.aws_iam_role_external_id.name
+}
+
+resource "aws_iam_role_policy_attachment" "github_actions_oidc_provisioning_for_oidc_role" {
+  for_each = {
+    for key, value in local.aws_iam_roles_for_spacelift :
+    key => value if endswith(key, "-aws")
+  }
+  policy_arn = aws_iam_policy.github_actions_oidc_provisioning.arn
+  role       = each.value.aws_iam_role_oidc.name
 }

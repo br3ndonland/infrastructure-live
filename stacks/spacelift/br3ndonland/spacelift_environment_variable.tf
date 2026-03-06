@@ -29,7 +29,7 @@ resource "spacelift_environment_variable" "op_vault_item_github_token" {
 }
 
 resource "spacelift_environment_variable" "s3_backend_bucket_role_arn" {
-  for_each    = spacelift_aws_integration.oidc
+  for_each    = spacelift_aws_integration.external_id
   context_id  = spacelift_context.space[each.key].id
   description = "ARN of role used to access the OpenTofu S3 backend bucket"
   name        = "TF_VAR_s3_backend_bucket_role_arn"
@@ -37,6 +37,7 @@ resource "spacelift_environment_variable" "s3_backend_bucket_role_arn" {
   write_only  = false
 }
 
+/* Uncomment to enable OIDC role assumption in S3 state backend
 resource "spacelift_environment_variable" "s3_backend_bucket_web_identity_token_file" {
   for_each    = spacelift_aws_integration.oidc
   context_id  = spacelift_context.space[each.key].id
@@ -45,6 +46,7 @@ resource "spacelift_environment_variable" "s3_backend_bucket_web_identity_token_
   value       = "/mnt/workspace/spacelift.oidc"
   write_only  = false
 }
+*/
 
 resource "spacelift_environment_variable" "SPACELIFT_API_KEY_ENDPOINT" {
   description = "Endpoint for API key used by Spacelift administrative stack"
