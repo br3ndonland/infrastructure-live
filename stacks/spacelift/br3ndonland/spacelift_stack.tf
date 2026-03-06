@@ -17,7 +17,7 @@ resource "spacelift_stack" "aws-br3ndonland-github-actions-oidc" {
   terraform_version                = var.opentofu_version
 }
 
-resource "spacelift_stack" "aws-br3ndonland-spacelift-oidc" {
+resource "spacelift_stack" "aws-br3ndonland-spacelift" {
   additional_project_globs         = ["modules/aws-spacelift-oidc"]
   administrative                   = false
   allow_run_promotion              = false
@@ -27,8 +27,8 @@ resource "spacelift_stack" "aws-br3ndonland-spacelift-oidc" {
   enable_well_known_secret_masking = true
   labels                           = ["aws", "spacelift"]
   manage_state                     = false
-  name                             = "aws-br3ndonland-spacelift-oidc"
-  project_root                     = "stacks/aws/br3ndonland/spacelift-oidc"
+  name                             = "aws-br3ndonland-spacelift"
+  project_root                     = "stacks/aws/br3ndonland/spacelift"
   protect_from_deletion            = false
   repository                       = var.github_repo
   space_id                         = spacelift_space.in_root_space["br3ndonland-aws"].id

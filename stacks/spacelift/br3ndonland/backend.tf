@@ -11,13 +11,13 @@ terraform {
   }
 }
 
-data "terraform_remote_state" "spacelift_oidc" {
+data "terraform_remote_state" "spacelift" {
   # This data source allows the AWS IAM role used for the Spacelift space to access state from AWS stacks.
   # This access is needed for provisioning `spacelift_aws_integration` resources.
   backend = "s3"
   config = {
     bucket = var.s3_backend_bucket_name
-    key    = var.s3_backend_bucket_key_spacelift_oidc
+    key    = var.s3_backend_bucket_key_spacelift
     region = var.s3_backend_bucket_region
     assume_role_with_web_identity = var.s3_backend_bucket_role_arn != null ? {
       role_arn                = var.s3_backend_bucket_role_arn

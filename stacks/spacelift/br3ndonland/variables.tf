@@ -19,7 +19,7 @@ variable "s3_backend_bucket_key" {
   type        = string
 }
 
-variable "s3_backend_bucket_key_spacelift_oidc" {
+variable "s3_backend_bucket_key_spacelift" {
   description = "Path to OpenTofu remote state in S3 backend bucket"
   type        = string
 }
