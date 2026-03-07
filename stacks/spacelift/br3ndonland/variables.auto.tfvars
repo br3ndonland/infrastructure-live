@@ -1,5 +1,5 @@
 github_repo                     = "infrastructure-live"
-opentofu_version                = "1.10"
+opentofu_version                = "1.11"
 s3_backend_bucket_key           = "stacks/spacelift/br3ndonland/terraform.tfstate"
 s3_backend_bucket_key_spacelift = "stacks/aws/br3ndonland/spacelift-oidc/terraform.tfstate"
 s3_backend_bucket_name          = "br3ndonland-infrastructure-live"
