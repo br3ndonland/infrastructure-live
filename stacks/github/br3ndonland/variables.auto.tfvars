@@ -13,7 +13,7 @@ repos = {
       homepage_url           = "https://www.bws.bio"
       protected_branch_names = ["main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
@@ -54,7 +54,7 @@ repos = {
       from_repo_template     = "br3ndonland/template-python"
       protected_branch_names = ["main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
@@ -126,7 +126,7 @@ repos = {
       ]
       protected_branch_names = ["main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
@@ -173,7 +173,7 @@ repos = {
       default_branch_name    = "develop"
       protected_branch_names = ["develop", "main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
@@ -240,7 +240,7 @@ repos = {
       is_repo_template       = true
       protected_branch_names = ["main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
@@ -257,7 +257,7 @@ repos = {
       description            = "OpenTofu module for connecting GitHub Actions and AWS with OIDC"
       protected_branch_names = ["main"]
       required_signatures = {
-        branches = true
+        branches = false
         tags     = true
       }
       required_status_checks = {
