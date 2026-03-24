@@ -286,5 +286,19 @@ repos = {
         }
       }
     }
+    vscode-gitless = {
+      visibility  = "public"
+      description = "Git in VSCode with less bloat."
+      topics = [
+        "git",
+        "github",
+        "vscode-extension",
+      ]
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = false
+        tags     = false
+      }
+    }
   }
 }
