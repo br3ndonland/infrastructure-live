@@ -27,3 +27,24 @@ moved {
   from = github_repository_ruleset.tags["tofu-aws-github-actions-oidc"]
   to   = github_repository_ruleset.tags["terraform-aws-github-actions-oidc"]
 }
+
+moved {
+  from = github_repository.repo["vscode-gitless"]
+  to   = github_repository.repo["gitless-vscode"]
+}
+
+moved {
+  from = github_branch_default.default["vscode-gitless"]
+  to   = github_branch_default.default["gitless-vscode"]
+}
+
+moved {
+  from = github_repository_ruleset.branches["vscode-gitless"]
+  to   = github_repository_ruleset.branches["gitless-vscode"]
+}
+
+moved {
+  from = github_repository_ruleset.tags["vscode-gitless"]
+  to   = github_repository_ruleset.tags["gitless-vscode"]
+}
+

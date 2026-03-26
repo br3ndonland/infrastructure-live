@@ -140,6 +140,20 @@ repos = {
         }
       }
     }
+    gitless-vscode = {
+      visibility  = "public"
+      description = "Git in VSCode with less bloat."
+      topics = [
+        "git",
+        "github",
+        "vscode-extension",
+      ]
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = false
+        tags     = false
+      }
+    }
     golearn = {
       visibility             = "public"
       description            = "Resources from learning Go"
@@ -284,20 +298,6 @@ repos = {
         tags = {
           check = 15368
         }
-      }
-    }
-    vscode-gitless = {
-      visibility  = "public"
-      description = "Git in VSCode with less bloat."
-      topics = [
-        "git",
-        "github",
-        "vscode-extension",
-      ]
-      protected_branch_names = ["main"]
-      required_signatures = {
-        branches = false
-        tags     = false
       }
     }
   }

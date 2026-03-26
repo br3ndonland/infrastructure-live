@@ -64,13 +64,3 @@ import {
   id = "infrastructure-live"
   to = github_branch_default.default["infrastructure-live"]
 }
-
-import {
-  id = "vscode-gitless"
-  to = github_repository.repo["vscode-gitless"]
-}
-
-import {
-  id = "vscode-gitless"
-  to = github_branch_default.default["vscode-gitless"]
-}
