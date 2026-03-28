@@ -10,6 +10,7 @@ repos = {
       visibility             = "public"
       description            = "My personal website, built with Astro 🚀"
       enable_github_pages    = true
+      github_pages_path      = "/"
       homepage_url           = "https://www.bws.bio"
       protected_branch_names = ["main"]
       required_signatures = {
