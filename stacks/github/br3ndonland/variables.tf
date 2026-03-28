@@ -109,6 +109,8 @@ variable "repos" {
 
     # rules
     protected_branch_names          = optional(list(string))
+    require_code_owner_review       = optional(bool, true)
+    require_last_push_approval      = optional(bool, true)
     required_approving_review_count = optional(number, 1)
     required_deployments            = optional(map(list(string)))
     required_signatures             = optional(map(bool))

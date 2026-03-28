@@ -180,8 +180,8 @@ resource "github_repository_ruleset" "branches" {
 
     pull_request {
       dismiss_stale_reviews_on_push   = false
-      require_code_owner_review       = true
-      require_last_push_approval      = true
+      require_code_owner_review       = var.repos[var.owner][each.key].require_code_owner_review
+      require_last_push_approval      = var.repos[var.owner][each.key].require_last_push_approval
       required_approving_review_count = var.repos[var.owner][each.key].required_approving_review_count
     }
 

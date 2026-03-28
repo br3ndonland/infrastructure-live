@@ -148,10 +148,20 @@ repos = {
         "github",
         "vscode-extension",
       ]
-      protected_branch_names = ["main"]
+      protected_branch_names     = ["main"]
+      require_code_owner_review  = false
+      require_last_push_approval = false
       required_signatures = {
         branches = false
         tags     = false
+      }
+      required_status_checks = {
+        branches = {
+          build-and-test = 15368
+        }
+        tags = {
+          build-and-test = 15368
+        }
       }
     }
     golearn = {
