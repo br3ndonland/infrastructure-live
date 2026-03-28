@@ -226,12 +226,6 @@ resource "github_repository_ruleset" "tags" {
     bypass_mode = "always"
   }
 
-  bypass_actors {
-    actor_id    = 2 # repository maintainer
-    actor_type  = "RepositoryRole"
-    bypass_mode = "always"
-  }
-
   dynamic "bypass_actors" {
     for_each = local.organization_settings
     content {
