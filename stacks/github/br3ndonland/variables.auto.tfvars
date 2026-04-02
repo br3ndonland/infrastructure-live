@@ -261,6 +261,8 @@ repos = {
     template-python = {
       visibility             = "public"
       description            = "Template repository for Python projects"
+      homepage_url           = "https://br3ndonland.github.io/template-python/"
+      enable_github_pages    = true
       has_discussions        = true
       is_repo_template       = true
       protected_branch_names = ["main"]
@@ -270,10 +272,13 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.13)" = 15368
+          "ci (3.13)"  = 15368
+          "Build docs" = 15368
         }
         tags = {
-          "ci (3.13)" = 15368
+          "ci (3.13)"                   = 15368
+          "Build docs"                  = 15368
+          "Deploy docs to GitHub Pages" = 15368
         }
       }
     }
