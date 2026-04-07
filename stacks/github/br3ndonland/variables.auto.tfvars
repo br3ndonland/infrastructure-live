@@ -142,8 +142,9 @@ repos = {
       }
     }
     gitless-vscode = {
-      visibility  = "public"
-      description = "Git in VSCode with less bloat."
+      visibility      = "public"
+      description     = "Git in VSCode with less bloat."
+      has_discussions = true
       topics = [
         "git",
         "github",
