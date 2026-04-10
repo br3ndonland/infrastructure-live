@@ -303,6 +303,7 @@ repos = {
     terraform-examples = {
       visibility             = "public"
       description            = "Example Terraform configurations"
+      is_archived            = true
       protected_branch_names = ["main"]
       required_signatures = {
         branches = true

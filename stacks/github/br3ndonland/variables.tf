@@ -92,6 +92,7 @@ variable "repos" {
     has_discussions          = optional(bool, false)
     has_issues               = optional(bool, false)
     has_vulnerability_alerts = optional(bool)
+    is_archived              = optional(bool, false)
     is_repo_template         = optional(bool, false)
 
     # default branch

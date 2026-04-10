@@ -58,6 +58,7 @@ resource "github_repository" "repo" {
   topics                      = each.value.topics
   visibility                  = each.value.visibility
   gitignore_template          = each.value.gitignore_template
+  archived                    = each.value.is_archived
   is_template                 = each.value.is_repo_template
   allow_auto_merge            = false
   allow_merge_commit          = each.value.allow_merge_commit
