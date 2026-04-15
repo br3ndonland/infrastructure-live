@@ -2,15 +2,15 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.opentofu.org/spacelift-io/spacelift" {
-  version     = "1.44.0"
+  version     = "1.47.1"
   constraints = ">= 1.0.0, < 2.0.0"
   hashes = [
-    "h1:GxUrlRComki7G7WStrhPItS/HxEm2LZfHTbT3t58h+8=",
-    "zh:1f48d3bf04d0416888149b611c6919b08eb461b0442768efce19aa273aef23ba",
-    "zh:4327f2ae006b42ee6e0720e60b370c34efd66639e1a105ec0a732b28235a3a00",
-    "zh:49961c195944e4dc2b235aebe910596f5383d59d4524eab51e4678a70c622a2a",
-    "zh:7a942a4312e79c380b09ea813126ae1e59022bdc955a0824b0fa7db32c23e61e",
-    "zh:d3580501d97cc5d019f30bb6421debe9fc33abc66c766eb6f9c37960eec19ae4",
-    "zh:df18b22e6d1bd8e2091747cb1b85ee834a4263e87723345930f3dd9437baaecd",
+    "h1:rmyYqvp/9MIOkXqDk2oZMGLj+ONvzYGe94qXlMOXiS0=",
+    "zh:0274dc0f7573669f340787936800ef69c852f02331a686407009b8b7b5a72d65",
+    "zh:4d10636a081d28258196ee4671c7f8239c185c31c67427cfdff5ba8b471d1aa8",
+    "zh:860ad051699a64d5e12f99032a798cd27c6d5d2e0270428c0d51bfd8f586b4be",
+    "zh:9c2e8f476e1e58ad368a9ce180153b8dcd0f2ce79f925807974eb7fc7f94c1f9",
+    "zh:ea349680ab2b8a5f8660012369e8e4da3293cf3dffd8b8bb98468e0e2c13070c",
+    "zh:f82308e97dfc6ccd80b2eabe2c313f17f6be645eeb206618af4f796b5b7d4850",
   ]
 }
