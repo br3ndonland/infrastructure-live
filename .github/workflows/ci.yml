@@ -124,3 +124,23 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           annotations: ${{ steps.meta.outputs.annotations }}
           labels: ${{ steps.meta.outputs.labels }}
+  docker-cleanup:
+    environment:
+      name: github-actions/write
+      deployment: false
+    if: github.ref_type == 'tag' || github.ref == 'refs/heads/main'
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: 1Password/load-secrets-action/configure@92467eb28f72e8255933372f1e0707c567ce2259 # v4.0.0
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+      - uses: 1Password/load-secrets-action@92467eb28f72e8255933372f1e0707c567ce2259 # v4.0.0
+        id: load_secrets
+        env:
+          GH_PAT: op://${{ vars.OP_VAULT }}/${{ vars.OP_VAULT_ITEM_GITHUB_PAT_GHCR }}/credential
+      - uses: dataaxiom/ghcr-cleanup-action@cd0cdb900b5dbf3a6f2cc869f0dbb0b8211f50c4 # v1.0.16
+        with:
+          delete-untagged: true
+          package: spacelift-runner-terraform
+          token: ${{ steps.load_secrets.outputs.GH_PAT }}
