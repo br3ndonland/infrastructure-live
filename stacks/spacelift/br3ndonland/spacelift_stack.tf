@@ -1,6 +1,5 @@
 resource "spacelift_stack" "aws-br3ndonland-github-actions-oidc" {
   additional_project_globs         = null
-  administrative                   = false
   allow_run_promotion              = false
   autodeploy                       = true
   branch                           = var.github_branch_default
@@ -19,7 +18,6 @@ resource "spacelift_stack" "aws-br3ndonland-github-actions-oidc" {
 
 resource "spacelift_stack" "aws-br3ndonland-spacelift" {
   additional_project_globs         = ["modules/aws-spacelift-oidc"]
-  administrative                   = false
   allow_run_promotion              = false
   autodeploy                       = true
   branch                           = var.github_branch_default
@@ -38,7 +36,6 @@ resource "spacelift_stack" "aws-br3ndonland-spacelift" {
 
 resource "spacelift_stack" "github-br3ndonland" {
   additional_project_globs         = null
-  administrative                   = false
   allow_run_promotion              = false
   autodeploy                       = true
   branch                           = var.github_branch_default
@@ -58,7 +55,6 @@ resource "spacelift_stack" "github-br3ndonland" {
 
 resource "spacelift_stack" "spacelift-br3ndonland" {
   additional_project_globs         = null
-  administrative                   = true
   allow_run_promotion              = false
   autodeploy                       = true
   branch                           = var.github_branch_default
