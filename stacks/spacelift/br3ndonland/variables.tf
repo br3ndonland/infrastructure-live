@@ -53,3 +53,13 @@ variable "spacelift_organization" {
   description = "Name of Spacelift organization in which to provision resources"
   type        = string
 }
+
+variable "spacelift_space_admin_role_id" {
+  description = <<-DESCRIPTION
+    ID of Spacelift RBAC role granting space admin.
+    Can be one of the default system roles. Locate role IDs in Organization settings --> Roles.
+    Space admin roles replace the deprecated "administrative stack" feature.
+    https://docs.spacelift.io/concepts/authorization/rbac-system
+  DESCRIPTION
+  type        = string
+}

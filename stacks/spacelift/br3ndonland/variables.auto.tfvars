@@ -5,3 +5,4 @@ s3_backend_bucket_key_spacelift = "stacks/aws/br3ndonland/spacelift-oidc/terrafo
 s3_backend_bucket_name          = "br3ndonland-infrastructure-live"
 s3_backend_bucket_region        = "us-east-2"
 spacelift_organization          = "br3ndonland"
+spacelift_space_admin_role_id   = "01JMEWR9E470CCBQ84Y23YKYA4"
