@@ -72,9 +72,19 @@ repos = {
       }
     }
     dotfiles = {
-      visibility             = "public"
-      description            = "Computer setup and settings. Apple Silicon ready."
-      topics                 = ["apple-silicon", "dotfiles", "homebrew", "macos", "strap"]
+      visibility  = "public"
+      description = "Computer setup and settings. Apple Silicon ready."
+      topics = [
+        "ai",
+        "apple-silicon",
+        "claude-code",
+        "codex",
+        "dotfiles",
+        "homebrew",
+        "macos",
+        "opencode",
+        "strap",
+      ]
       protected_branch_names = ["main"]
       required_signatures = {
         branches = true
