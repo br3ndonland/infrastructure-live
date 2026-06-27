@@ -248,6 +248,33 @@ repos = {
         }
       }
     }
+    nrf1-proteomics = {
+      visibility = "public"
+      # description = "Proteomics experiments and reproducible data analysis"
+      # homepage_url = "https://www.bws.bio/projects/nrf1-proteomics"
+      # topics = [
+      #   "bioinformatics",
+      #   "computational-biology",
+      #   "mass-spectrometry",
+      #   "proteomics-data-analysis",
+      #   "proteomics",
+      #   "scientific-visualization",
+      # ]
+      from_repo_template     = "br3ndonland/template-python"
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = false
+        tags     = true
+      }
+      required_status_checks = {
+        branches = {
+          "ci (3.13)" = 15368
+        }
+        tags = {
+          "ci (3.13)" = 15368
+        }
+      }
+    }
     R-guide = {
       visibility             = "public"
       description            = "A quick reference guide and sample code for statistical programming in R"
