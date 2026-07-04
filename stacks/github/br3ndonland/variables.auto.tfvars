@@ -249,17 +249,19 @@ repos = {
       }
     }
     nrf1-proteomics = {
-      visibility = "public"
-      # description = "Proteomics experiments and reproducible data analysis"
+      visibility  = "public"
+      description = "Proteomics experiments and reproducible data analysis"
       # homepage_url = "https://www.bws.bio/projects/nrf1-proteomics"
-      # topics = [
-      #   "bioinformatics",
-      #   "computational-biology",
-      #   "mass-spectrometry",
-      #   "proteomics-data-analysis",
-      #   "proteomics",
-      #   "scientific-visualization",
-      # ]
+      topics = [
+        "bioinformatics",
+        "computational-biology",
+        "mass-spectrometry",
+        "proteomics-data-analysis",
+        "proteomics",
+        "reproducible-research",
+        "reproducible-science",
+        "scientific-visualization",
+      ]
       from_repo_template     = "br3ndonland/template-python"
       protected_branch_names = ["main"]
       required_signatures = {
