@@ -296,6 +296,17 @@ repos = {
         }
       }
     }
+    sox = {
+      visibility             = "public"
+      description            = "Docker container image for audio analysis and conversion with Sound eXchange (SoX)"
+      has_discussions        = true
+      topics                 = ["alpine-linux", "audio", "docker", "ffmpeg", "flac", "mkvmerge", "mkvtoolnix", "sox"]
+      protected_branch_names = ["main"]
+      required_signatures = {
+        branches = true
+        tags     = true
+      }
+    }
     template-python = {
       visibility             = "public"
       description            = "Template repository for Python projects"
