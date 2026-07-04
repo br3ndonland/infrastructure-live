@@ -103,9 +103,9 @@ repos = {
     }
     dovi_tool = {
       visibility             = "public"
-      description            = "Container image that can be used to run dovi_tool"
+      description            = "Docker container image for Dolby Vision analysis and conversion with dovi_tool"
       has_discussions        = true
-      topics                 = ["dolby-vision", "dovi"]
+      topics                 = ["alpine-linux", "docker", "dolby-vision", "dovi", "mkvmerge", "mkvtoolnix"]
       protected_branch_names = ["main"]
       required_signatures = {
         branches = true
