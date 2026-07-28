@@ -247,9 +247,9 @@ repos = {
       }
     }
     nrf1-proteomics = {
-      visibility  = "public"
-      description = "Proteomics experiments and reproducible data analysis"
-      # homepage_url = "https://www.bws.bio/projects/nrf1-proteomics"
+      visibility   = "public"
+      description  = "Proteomics experiments and reproducible data analysis."
+      homepage_url = "https://www.bws.bio/projects/nrf1-proteomics"
       topics = [
         "bioinformatics",
         "computational-biology",
