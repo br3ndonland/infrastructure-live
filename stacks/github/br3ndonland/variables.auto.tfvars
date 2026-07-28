@@ -60,13 +60,11 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.12)" = 15368
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
           "Vercel"    = 8329
         }
         tags = {
-          "ci (3.12)" = 15368
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
           "Vercel"    = 8329
         }
       }
@@ -142,11 +140,11 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
           "Vercel"    = 8329
         }
         tags = {
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
           "Vercel"    = 8329
         }
       }
@@ -214,17 +212,17 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "docker (alpine, 3.13)"      = 15368
-          "docker (trixie, 3.13)"      = 15368
-          "docker (slim-trixie, 3.13)" = 15368
-          "python (3.13)"              = 15368
+          "docker (alpine, 3.14)"      = 15368
+          "docker (trixie, 3.14)"      = 15368
+          "docker (slim-trixie, 3.14)" = 15368
+          "python (3.14)"              = 15368
           "Vercel"                     = 8329
         }
         tags = {
-          "docker (alpine, 3.13)"      = 15368
-          "docker (trixie, 3.13)"      = 15368
-          "docker (slim-trixie, 3.13)" = 15368
-          "python (3.13)"              = 15368
+          "docker (alpine, 3.14)"      = 15368
+          "docker (trixie, 3.14)"      = 15368
+          "docker (slim-trixie, 3.14)" = 15368
+          "python (3.14)"              = 15368
           "Vercel"                     = 8329
         }
       }
@@ -270,10 +268,10 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
         }
         tags = {
-          "ci (3.13)" = 15368
+          "ci (3.14)" = 15368
         }
       }
     }
@@ -323,11 +321,11 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          "ci (3.13)"  = 15368
+          "ci (3.14)"  = 15368
           "Build docs" = 15368
         }
         tags = {
-          "ci (3.13)"                   = 15368
+          "ci (3.14)"                   = 15368
           "Build docs"                  = 15368
           "Deploy docs to GitHub Pages" = 15368
         }
