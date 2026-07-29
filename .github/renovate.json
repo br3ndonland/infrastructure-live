@@ -1,0 +1,19 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "addLabels": ["dependencies"],
+  "enabledManagers": ["github-actions", "terraform"],
+  "extends": ["config:recommended"],
+  "minimumReleaseAge": "3 days",
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
+      "matchDatasources": ["terraform-module", "terraform-provider"],
+      "registryUrls": ["https://registry.opentofu.org"]
+    }
+  ],
+  "prConcurrentLimit": 10,
+  "prHourlyLimit": 5
+}
