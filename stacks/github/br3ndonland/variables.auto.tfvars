@@ -237,8 +237,12 @@ repos = {
       }
       required_status_checks = {
         branches = {
-          build = 15368
-          check = 15368
+          build                                           = 15368
+          check                                           = 15368
+          "spacelift/aws-br3ndonland-github-actions-oidc" = 47046
+          "spacelift/aws-br3ndonland-spacelift"           = 47046
+          "spacelift/github-br3ndonland"                  = 47046
+          "spacelift/spacelift-br3ndonland"               = 47046
         }
         tags = {
           build = 15368
