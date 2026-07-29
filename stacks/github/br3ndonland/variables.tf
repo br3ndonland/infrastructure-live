@@ -83,17 +83,18 @@ variable "repos" {
   DESCRIPTION
   type = map(map(object({
     # general settings
-    visibility               = string
-    description              = optional(string)
-    homepage_url             = optional(string)
-    topics                   = optional(list(string))
-    from_repo_template       = optional(string)
-    gitignore_template       = optional(string)
-    has_discussions          = optional(bool, false)
-    has_issues               = optional(bool, false)
-    has_vulnerability_alerts = optional(bool)
-    is_archived              = optional(bool, false)
-    is_repo_template         = optional(bool, false)
+    visibility                      = string
+    description                     = optional(string)
+    homepage_url                    = optional(string)
+    topics                          = optional(list(string))
+    from_repo_template              = optional(string)
+    gitignore_template              = optional(string)
+    has_discussions                 = optional(bool, false)
+    has_issues                      = optional(bool, false)
+    has_dependabot_security_updates = optional(bool, false)
+    has_vulnerability_alerts        = optional(bool, true)
+    is_archived                     = optional(bool, false)
+    is_repo_template                = optional(bool, false)
 
     # default branch
     default_branch_name = optional(string, "main")

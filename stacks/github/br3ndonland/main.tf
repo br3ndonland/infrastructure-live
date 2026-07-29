@@ -8,6 +8,10 @@ locals {
     for key, value in var.organization_settings :
     key => value if key == var.owner
   }
+  unarchived_repositories = {
+    for key, value in lookup(var.repos, var.owner, {}) :
+    key => value if !value.is_archived
+  }
   repo_branch_names = {
     for repo_name, repo_configuration in lookup(var.repos, var.owner, {}) :
     repo_name => toset([for branch_name in repo_configuration.protected_branch_names : branch_name])
@@ -73,11 +77,6 @@ resource "github_repository" "repo" {
   has_issues                  = each.value.has_issues
   has_projects                = false
   has_wiki                    = false
-  vulnerability_alerts = (
-    each.value.has_vulnerability_alerts == true || each.value.visibility == "public"
-    ? true
-    : false
-  )
   dynamic "security_and_analysis" {
     for_each = local.advanced_security == true ? [""] : []
     content {
@@ -111,6 +110,21 @@ resource "github_repository" "repo" {
       repository           = split("/", each.value.from_repo_template)[1]
     }
   }
+}
+
+resource "github_repository_vulnerability_alerts" "repo" {
+  for_each = local.unarchived_repositories
+
+  repository = github_repository.repo[each.key].name
+  enabled    = each.value.has_vulnerability_alerts
+}
+
+resource "github_repository_dependabot_security_updates" "repo" {
+  depends_on = [github_repository_vulnerability_alerts.repo]
+  for_each   = local.unarchived_repositories
+
+  repository = github_repository.repo[each.key].name
+  enabled    = each.value.has_dependabot_security_updates
 }
 
 resource "github_branch" "branch" {
