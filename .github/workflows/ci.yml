@@ -139,7 +139,7 @@ jobs:
         id: load_secrets
         env:
           GH_PAT: op://${{ vars.OP_VAULT }}/${{ vars.OP_VAULT_ITEM_GITHUB_PAT_GHCR }}/credential
-      - uses: dataaxiom/ghcr-cleanup-action@f092b48ba3b604b2a83690dc4b2bbb3392e1045f # v1.2.1
+      - uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
         with:
           delete-untagged: true
           package: spacelift-runner-terraform
