@@ -108,7 +108,6 @@ variable "repos" {
     # pages
     enable_github_pages = optional(bool, false)
     github_pages_cname  = optional(string)
-    github_pages_path   = optional(string, "/")
 
     # rules
     protected_branch_names          = optional(list(string))

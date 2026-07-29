@@ -8,6 +8,10 @@ locals {
     for key, value in var.organization_settings :
     key => value if key == var.owner
   }
+  github_pages_repositories = {
+    for key, value in lookup(var.repos, var.owner, {}) :
+    key => value if value.enable_github_pages
+  }
   unarchived_repositories = {
     for key, value in lookup(var.repos, var.owner, {}) :
     key => value if !value.is_archived
@@ -91,17 +95,6 @@ resource "github_repository" "repo" {
       }
     }
   }
-  dynamic "pages" {
-    for_each = each.value.enable_github_pages == true ? [""] : []
-    content {
-      build_type = "workflow"
-      cname      = each.value.github_pages_cname
-      source {
-        branch = each.value.default_branch_name
-        path   = each.value.github_pages_path
-      }
-    }
-  }
   dynamic "template" {
     for_each = each.value.from_repo_template != null ? [""] : []
     content {
@@ -110,6 +103,17 @@ resource "github_repository" "repo" {
       repository           = split("/", each.value.from_repo_template)[1]
     }
   }
+  lifecycle {
+    ignore_changes = [pages]
+  }
+}
+
+resource "github_repository_pages" "repo" {
+  for_each = local.github_pages_repositories
+
+  build_type = "workflow"
+  cname      = each.value.github_pages_cname
+  repository = github_repository.repo[each.key].name
 }
 
 resource "github_repository_vulnerability_alerts" "repo" {
@@ -140,16 +144,16 @@ resource "github_branch" "branch" {
 
 resource "github_branch_default" "default" {
   depends_on = [github_repository.repo, github_branch.branch]
-  for_each   = github_repository.repo
-  repository = each.key
+  for_each   = lookup(var.repos, var.owner, {})
+  repository = github_repository.repo[each.key].name
   branch     = var.repos[var.owner][each.key].default_branch_name
 }
 
 resource "github_repository_ruleset" "branches" {
-  for_each    = github_repository.repo
+  for_each    = lookup(var.repos, var.owner, {})
   enforcement = "active"
   name        = "branches"
-  repository  = each.key
+  repository  = github_repository.repo[each.key].name
   target      = "branch"
 
   bypass_actors {
@@ -229,10 +233,10 @@ resource "github_repository_ruleset" "branches" {
 }
 
 resource "github_repository_ruleset" "tags" {
-  for_each    = github_repository.repo
+  for_each    = lookup(var.repos, var.owner, {})
   enforcement = "active"
   name        = "tags"
-  repository  = each.key
+  repository  = github_repository.repo[each.key].name
   target      = "tag"
 
   bypass_actors {
