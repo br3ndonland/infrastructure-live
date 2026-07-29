@@ -64,7 +64,7 @@ resource "github_repository" "repo" {
   gitignore_template          = each.value.gitignore_template
   archived                    = each.value.is_archived
   is_template                 = each.value.is_repo_template
-  allow_auto_merge            = false
+  allow_auto_merge            = each.value.allow_auto_merge
   allow_merge_commit          = each.value.allow_merge_commit
   allow_rebase_merge          = each.value.allow_rebase_merge
   allow_squash_merge          = each.value.allow_squash_merge

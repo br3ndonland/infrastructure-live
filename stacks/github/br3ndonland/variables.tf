@@ -100,6 +100,7 @@ variable "repos" {
     default_branch_name = optional(string, "main")
 
     # pull requests
+    allow_auto_merge   = optional(bool, true)
     allow_merge_commit = optional(bool, false)
     allow_rebase_merge = optional(bool, false)
     allow_squash_merge = optional(bool, true)
