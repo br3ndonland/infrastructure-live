@@ -28,6 +28,12 @@ locals {
 }
 
 import {
+  for_each = local.github_pages_repositories
+  id       = each.key
+  to       = github_repository_pages.repo[each.key]
+}
+
+import {
   for_each = {
     for key, value in var.repos[var.owner] :
     key => value if contains(keys(local.github_repository_ruleset_ids), key)
