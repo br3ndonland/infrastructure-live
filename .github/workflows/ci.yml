@@ -130,17 +130,11 @@ jobs:
       deployment: false
     if: github.ref_type == 'tag' || github.ref == 'refs/heads/main'
     needs: [build]
+    permissions:
+      packages: write
     runs-on: ubuntu-latest
     steps:
-      - uses: 1Password/load-secrets-action/configure@eb2efd0703da22a93c467f2d1ffbb6826c11e19c # v4.1.1
-        with:
-          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
-      - uses: 1Password/load-secrets-action@eb2efd0703da22a93c467f2d1ffbb6826c11e19c # v4.1.1
-        id: load_secrets
-        env:
-          GH_PAT: op://${{ vars.OP_VAULT }}/${{ vars.OP_VAULT_ITEM_GITHUB_PAT_GHCR }}/credential
       - uses: dataaxiom/ghcr-cleanup-action@d52806a0dc70b430571a37da1fde39733ffd640f # v1.2.2
         with:
           delete-untagged: true
           package: spacelift-runner-terraform
-          token: ${{ steps.load_secrets.outputs.GH_PAT }}
