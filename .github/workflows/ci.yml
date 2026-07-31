@@ -67,12 +67,12 @@ jobs:
           role-to-assume: ${{ vars.AWS_IAM_ROLE_ARN }}
           role-duration-seconds: 1200
       - name: Log in to AWS ECR
-        uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
+        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
         if: ${{ github.ref_name == 'main' || github.ref_type == 'tag' }}
         with:
           registry: public.ecr.aws
       - name: Log in to GitHub Container Registry (GHCR)
-        uses: docker/login-action@abd2ef45e78c5afb21d64d4ca52ee8550d9572c7 # v4.5.1
+        uses: docker/login-action@371161bbe7024a29a25c5e19bfcbc0804fe9ad2c # v4.5.2
         if: ${{ github.ref_name == 'main' || github.ref_type == 'tag' }}
         with:
           registry: ghcr.io
