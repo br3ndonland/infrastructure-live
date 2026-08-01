@@ -3,7 +3,7 @@
   "addLabels": ["dependencies"],
   "enabledManagers": ["github-actions", "terraform"],
   "extends": ["config:recommended"],
-  "minimumReleaseAge": "3 days",
+  "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
