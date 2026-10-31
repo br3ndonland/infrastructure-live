@@ -68,6 +68,6 @@ node = "24"
 # registry tools from other backends
 opentofu = "prefix:1.12"
 shellcheck = "prefix:0.11"
-shfmt = "prefix:3.14"
+shfmt = "3.14.1"
 # non-registry tools from specific backends
 "npm:prettier" = "prefix:3"
