@@ -1,13 +1,34 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "addLabels": ["dependencies"],
-  "enabledManagers": ["github-actions", "terraform"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Preserve mise prefix selectors and their version precision",
+      "managerFilePatterns": ["/^mise\\.toml$/"],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>\\S+) depName=(?<depName>\\S+)\\n[^\\n=]+\\s*=\\s*\"prefix:(?<currentValue>\\d+(?:\\.\\d+){0,2})\""
+      ],
+      "versioningTemplate": "semver-partial"
+    }
+  ],
+  "enabledManagers": ["custom.regex", "github-actions", "mise", "terraform"],
   "extends": ["config:recommended"],
   "minimumReleaseAge": "7 days",
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch"],
       "automerge": true
+    },
+    {
+      "description": "Use the regex manager until renovatebot/renovate#30365 is fixed",
+      "matchManagers": ["mise"],
+      "matchCurrentValue": "/^prefix:/",
+      "enabled": false
+    },
+    {
+      "matchManagers": ["custom.regex"],
+      "rangeStrategy": "replace"
     },
     {
       "matchDatasources": ["terraform-module", "terraform-provider"],

@@ -66,8 +66,12 @@ run = "tofu fmt -recursive"
 # registry tools from core backend
 node = "24"
 # registry tools from other backends
+# renovate: datasource=github-releases depName=opentofu/opentofu
 opentofu = "prefix:1.12"
+# renovate: datasource=github-releases depName=koalaman/shellcheck
 shellcheck = "prefix:0.11"
+# renovate: datasource=github-releases depName=mvdan/sh
 shfmt = "prefix:3.14"
 # non-registry tools from specific backends
+# renovate: datasource=npm depName=prettier
 "npm:prettier" = "prefix:3"
