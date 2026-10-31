@@ -10,6 +10,12 @@ The name "infrastructure-live" comes from the [Gruntwork paradigm](https://docs.
 
 The configurations run on [Spacelift](https://docs.spacelift.io/).
 
+## Development in Amp orbs
+
+[Amp orbs](https://ampcode.com/docs/orbs) run `.agents/setup` when preparing a fresh project snapshot. Setup installs mise and the tools declared in `mise.toml`, then initializes the stacks with `tofu init -backend=false -input=false -lockfile=readonly`. Providers share a cache in `~/.cache/opentofu/providers`, and installed tools and modules are retained in the snapshot.
+
+Repository tools and the provider cache are available in non-interactive Bash login shells, including shells started in repository subdirectories. Run `mise run check` for local code quality checks. `.agents/resume` does not install dependencies or authenticate cloud services. Setup does not access remote state, run plans, or apply infrastructure. Cloud operations require separate credentials and backend initialization.
+
 ## Containers
 
 ### spacelift-runner-terraform

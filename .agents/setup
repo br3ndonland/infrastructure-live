@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$repo_root"
+TIMEFORMAT='Completed in %3R seconds'
+
+echo "Installing mise if missing"
+export PATH="$HOME/.local/bin:$PATH"
+if ! command -v mise >/dev/null 2>&1; then
+	time curl -fsSL https://mise.run | sh
+fi
+
+echo "Installing the toolchain from mise.toml"
+mise trust "$repo_root/mise.toml"
+time mise install
+
+echo "Configuring the repository environment for non-interactive login shells"
+export TF_PLUGIN_CACHE_DIR="${TF_PLUGIN_CACHE_DIR:-$HOME/.cache/opentofu/providers}"
+mkdir -p "$TF_PLUGIN_CACHE_DIR"
+profile_marker='# infrastructure-live orb environment'
+if ! grep -Fqx "$profile_marker" "$HOME/.bash_profile" 2>/dev/null; then
+	cat >>"$HOME/.bash_profile" <<EOF
+
+$profile_marker
+if [[ -z "\${INFRASTRUCTURE_LIVE_ORB_ENV:-}" && ( "\$PWD" == "$repo_root" || "\$PWD" == "$repo_root/"* ) ]]; then
+  export INFRASTRUCTURE_LIVE_ORB_ENV=1
+  export PATH="\$HOME/.local/bin:\$PATH"
+  export TF_PLUGIN_CACHE_DIR="\${TF_PLUGIN_CACHE_DIR:-\$HOME/.cache/opentofu/providers}"
+  eval "\$(mise env --shell bash)"
+fi
+EOF
+fi
+
+echo "Installing stack providers and modules without accessing remote state"
+while IFS= read -r -d '' lockfile; do
+	stack="$(dirname "$lockfile")"
+	echo "Initializing $stack"
+	time mise exec -- tofu -chdir="$stack" init -backend=false -input=false -lockfile=readonly -no-color
+done < <(find stacks -name .terraform.lock.hcl -print0)

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Tools and providers are retained in the snapshot. Login shells load the
+# repository environment configured by setup. No authentication or services
+# are needed for local checks, so resume must not install or contact cloud APIs.
+echo "Orb ready. Use mise run check for local checks."
