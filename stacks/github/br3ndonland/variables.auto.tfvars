@@ -157,9 +157,8 @@ repos = {
         "github",
         "vscode-extension",
       ]
-      protected_branch_names     = ["main"]
-      require_code_owner_review  = false
-      require_last_push_approval = false
+      protected_branch_names    = ["main"]
+      require_code_owner_review = false
       required_signatures = {
         branches = false
         tags     = false
