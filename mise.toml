@@ -64,7 +64,7 @@ run = "tofu fmt -recursive"
 # https://mise.jdx.dev/dev-tools/
 #
 # registry tools from core backend
-node = "24"
+node = "26"
 # registry tools from other backends
 # renovate: datasource=github-releases depName=opentofu/opentofu
 opentofu = "prefix:1.13"
